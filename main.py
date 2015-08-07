@@ -3,6 +3,11 @@
 import ui
 import actions
 import exceptions
+import settings
+
+
+def setup():
+    settings.setup()
 
 
 def main():
@@ -17,4 +22,5 @@ def main():
 
 
 if __name__ == "__main__":
+    setup()
     main()
