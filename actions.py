@@ -1,4 +1,5 @@
 from collections import namedtuple
+import ui
 
 import exceptions
 
@@ -15,9 +16,16 @@ def quit():
     raise exceptions.QuitException()
 
 
-@action('s', 'Do something')
-def something():
-    print('Cool.')
+@action('i', 'New long-term idea')
+def new_idea():
+    idea = ui.ask('Tell me all about it.')
+    # TODO save idea
 
 
-MAIN_ACTIONS = [something, quit]
+@action('t', 'New task')
+def new_task():
+    task = ui.ask('What do you want to have done?')
+    # TODO save task
+
+
+MAIN_ACTIONS = [new_task, new_idea, quit]

@@ -8,7 +8,8 @@ import exceptions
 def main():
     try:
         while True:
-            action = ui.let_choose('Wat wil je doen?', actions.MAIN_ACTIONS)
+            action = ui.let_choose('What do you want to do?',
+                                   actions.MAIN_ACTIONS)
             if action is not None:
                 action.run()
     except (exceptions.QuitException, KeyboardInterrupt):
