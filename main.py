@@ -17,10 +17,11 @@ def main():
                                    actions.MAIN_ACTIONS)
             if action is not None:
                 action.run()
+            print()
     except (exceptions.QuitException, KeyboardInterrupt):
         pass
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     setup()
     main()
