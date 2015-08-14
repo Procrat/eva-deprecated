@@ -22,5 +22,5 @@ At the moment you can just run `main.py` using Python 3.
 
 ## Acknowledgements
 
-Many thanks to productivity.stackoverflow.com, zenhabits.net and GTD for
+Many thanks to [Personal Productivity @StackExchange](http://productivity.stackexchange.com), [zen habits](http://zenhabits.net) and [GTD](http://gettingthingsdone.com) for
 inspiring me!
