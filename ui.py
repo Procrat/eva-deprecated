@@ -1,5 +1,9 @@
-from actions import Action
 import exceptions
+import os
+import subprocess
+import tempfile
+
+from actions import Action
 
 
 def ask(question: str) -> str:
@@ -10,7 +14,7 @@ def ask(question: str) -> str:
     return answer
 
 
-def let_choose(question, possibilities: [Action]) -> str:
+def let_choose(question: str, possibilities: [Action]) -> str:
     """Prints possibilities and lets user select one through a mnemonic."""
 
     print(question)
@@ -25,3 +29,30 @@ def let_choose(question, possibilities: [Action]) -> str:
         return None
     else:  # > 1
         raise exceptions.MultipleActionsWithSameMnemonicException()
+
+
+def ask_from_editor(initial_content: str) -> str:
+    """
+    Open favourite editor with temporary file and return its content
+    afterwards.
+
+    Args:
+        initial_content (str): initial content of the temporary file
+    """
+    editor = os.getenv('EDITOR') or 'xdg-open'
+
+    temp_fd, temp_path = tempfile.mkstemp()
+    try:
+        with open(temp_fd, 'w') as temp_file:
+            temp_file.write(initial_content)
+
+        subprocess.check_call([editor, temp_path])
+
+        with open(temp_path) as temp_file:
+            return temp_file.read()
+
+    except subprocess.CalledProcessError as error:
+        print('Your editor (%s) exited with error code %d (%s).' %
+              (editor, error.returncode, error.message))
+    finally:
+        os.remove(temp_path)

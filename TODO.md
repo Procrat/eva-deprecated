@@ -1,6 +1,6 @@
 # TODO
 
-- Capture everything: todo, projects, ideas, recurring tasks
+- Capture everything: todo, projects, ideas, recurring tasks, scratchpad
 - Reflect: overview, see progress
 - What do you wanna do (or have done) today?
 - Labels

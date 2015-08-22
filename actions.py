@@ -1,11 +1,10 @@
 from collections import namedtuple
-
-from pony.orm import db_session
-
 from exceptions import QuitException
-from db import Idea, Task
-import ui
 
+from pony import orm
+
+import db
+import ui
 
 Action = namedtuple('Action', ('mnemonic', 'name', 'run'))
 
@@ -20,32 +19,40 @@ def quit():
 
 
 @action('i', 'New long-term idea')
-@db_session
+@orm.db_session
 def new_idea():
     content = ui.ask('Tell me all about it.')
-    Idea(content=content)
+    db.Idea(content=content)
 
 
 @action('t', 'New task')
-@db_session
+@orm.db_session
 def new_task():
     content = ui.ask('What do you want to have done?')
-    Task(content=content)
+    db.Task(content=content)
+
+
+@action('s', 'Open scratchpad')
+@orm.db_session
+def open_scratchpad():
+    scratchpad = db.get_scratchpad()
+    new_content = ui.ask_from_editor(scratchpad.content)
+    scratchpad.content = new_content
 
 
 @action('l', 'List tasks and ideas')
-@db_session
+@orm.db_session
 def list_all():
-    if len(Task.select()):
+    if len(db.Task.select()):
         print('TASKS')
-        for task in Task.select():
+        for task in db.Task.select():
             print(task)
         print()
 
-    if len(Idea.select()):
+    if len(db.Idea.select()):
         print('IDEAS')
-        for idea in Idea.select():
+        for idea in db.Idea.select():
             print(idea)
 
 
-MAIN_ACTIONS = [new_task, new_idea, list_all, quit]
+MAIN_ACTIONS = [new_task, new_idea, open_scratchpad, list_all, quit]
