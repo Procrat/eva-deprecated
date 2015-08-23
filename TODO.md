@@ -17,6 +17,8 @@
     - Reschedule stuff when other things get in the way
     - Ask why you stopped doing something
     - Reminders
+- Bulk edit with favorite editor
+- Make it personalized
 
 
 ## Long term ideas
@@ -27,6 +29,7 @@
 - Public commitment / announcement? (Don't know if this can be tied in with the
   application yet)
 - See if http://pyjs.org/Overview.html is any good
+- Make backups, both locally and on a server
 
 
 ## Concepts to bear in mind
