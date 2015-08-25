@@ -1,4 +1,3 @@
-from collections import namedtuple
 from exceptions import QuitException
 
 from pony import orm
@@ -6,40 +5,38 @@ from pony import orm
 import db
 import ui
 
-Action = namedtuple('Action', ('mnemonic', 'name', 'run'))
+
+def Action(mnemonic: str, name: str):
+    return lambda run: ui.Choice(mnemonic, name, run)
 
 
-def action(mnemonic, name):
-    return lambda run: Action(mnemonic, name, run)
-
-
-@action('q', 'Quit')
+@Action('q', 'Quit')
 def quit():
     raise QuitException()
 
 
-@action('i', 'New long-term idea')
+@Action('i', 'New long-term idea')
 @orm.db_session
 def new_idea():
     content = ui.ask('Tell me all about it.')
     db.Idea(content=content)
 
 
-@action('p', 'New project')
+@Action('p', 'New project')
 @orm.db_session
 def new_project():
     name = ui.ask('What project are you planning on taking on?')
     db.Project(name=name)
 
 
-@action('t', 'New task')
+@Action('t', 'New task')
 @orm.db_session
 def new_task():
     content = ui.ask('What do you want to have done?')
     db.Task(content=content)
 
 
-@action('s', 'Open scratchpad')
+@Action('s', 'Open scratchpad')
 @orm.db_session
 def open_scratchpad():
     scratchpad = db.get_scratchpad()
@@ -47,7 +44,7 @@ def open_scratchpad():
     scratchpad.content = new_content
 
 
-@action('l', 'List everything')
+@Action('l', 'List everything')
 @orm.db_session
 def list_all():
     for project in db.Project.select():

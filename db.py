@@ -37,6 +37,6 @@ class Scratchpad(db.Entity):
     content = Optional(str)
 
 
-def get_scratchpad():
+def get_scratchpad() -> Scratchpad:
     query_result = Scratchpad.select().for_update()[:1]
     return query_result[0] if query_result else Scratchpad(content='')

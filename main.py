@@ -16,7 +16,7 @@ def main():
             action = ui.let_choose('What do you want to do?',
                                    actions.MAIN_ACTIONS)
             if action is not None:
-                action.run()
+                action()
             print()
     except (exceptions.QuitException, KeyboardInterrupt):
         pass

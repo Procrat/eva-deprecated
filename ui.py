@@ -2,8 +2,9 @@ import exceptions
 import os
 import subprocess
 import tempfile
+from collections import namedtuple
 
-from actions import Action
+Choice = namedtuple('Choice', ('mnemonic', 'name', 'item'))
 
 
 def ask(question: str) -> str:
@@ -24,11 +25,11 @@ def let_choose(question: str, possibilities: [Action]) -> str:
     answers = [p for p in possibilities if p.mnemonic == char]
 
     if len(answers) == 1:
-        return answers[0]
+        return answers[0].item
     elif len(answers) < 1:
         return None
     else:  # > 1
-        raise exceptions.MultipleActionsWithSameMnemonicException()
+        raise exceptions.MultipleChoicesWithSameMnemonicException()
 
 
 def ask_from_editor(initial_content: str) -> str:

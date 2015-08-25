@@ -2,5 +2,5 @@ class QuitException(Exception):
     pass
 
 
-class MultipleActionsWithSameMnemonicException(Exception):
+class MultipleChoicesWithSameMnemonicException(Exception):
     pass
