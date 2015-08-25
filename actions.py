@@ -26,7 +26,14 @@ def new_idea():
 @orm.db_session
 def new_project():
     name = ui.ask('What project are you planning on taking on?')
-    db.Project(name=name)
+    project = db.Project(name=name)
+
+    # Ask for tasks in this project
+    while True:
+        task = ui.ask('What does this project consist of?')
+        if not task:
+            break
+        db.Task(content=task, project=project)
 
 
 @Action('t', 'New task')
