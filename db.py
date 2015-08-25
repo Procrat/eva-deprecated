@@ -3,6 +3,11 @@ from pony.orm import Database, Required, Set, Optional, PrimaryKey
 db = Database()
 
 
+class Project(db.Entity):
+    name = PrimaryKey(str)
+    tasks = Set('Task', reverse='project')
+
+
 class TodoItem(db.Entity):
     id = PrimaryKey(int, auto=True)
     content = Required(str)
@@ -12,8 +17,9 @@ class TodoItem(db.Entity):
 
 
 class Task(db.TodoItem):
-    subtasks = Set("Task", reverse="parent_task")
-    parent_task = Optional("Task", reverse="subtasks")
+    project = Optional('Project', reverse='tasks')
+    subtasks = Set('Task', reverse='parent_task')
+    parent_task = Optional('Task', reverse='subtasks')
 
     def __str__(self):
         s = '- {}'.format(self.content)

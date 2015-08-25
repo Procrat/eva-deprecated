@@ -25,6 +25,13 @@ def new_idea():
     db.Idea(content=content)
 
 
+@action('p', 'New project')
+@orm.db_session
+def new_project():
+    name = ui.ask('What project are you planning on taking on?')
+    db.Project(name=name)
+
+
 @action('t', 'New task')
 @orm.db_session
 def new_task():
@@ -40,19 +47,35 @@ def open_scratchpad():
     scratchpad.content = new_content
 
 
-@action('l', 'List tasks and ideas')
+@action('l', 'List everything')
 @orm.db_session
 def list_all():
+    for project in db.Project.select():
+        print(project.name.upper())
+        print('-' * len(project.name))
+        for task in project.tasks:
+            print(task)
+        print()
+
     if len(db.Task.select()):
         print('TASKS')
+        print('-----')
         for task in db.Task.select():
             print(task)
         print()
 
     if len(db.Idea.select()):
         print('IDEAS')
+        print('-----')
         for idea in db.Idea.select():
             print(idea)
 
 
-MAIN_ACTIONS = [new_task, new_idea, open_scratchpad, list_all, quit]
+MAIN_ACTIONS = [
+    new_task,
+    new_project,
+    new_idea,
+    open_scratchpad,
+    list_all,
+    quit,
+]
