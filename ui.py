@@ -15,12 +15,18 @@ def ask(question: str) -> str:
     return answer
 
 
-def let_choose(question: str, possibilities: [Action]) -> str:
+def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
     """Prints possibilities and lets user select one through a mnemonic."""
 
     print(question)
+
+    if none_option is not None:
+        possibilities = possibilities.copy()
+        possibilities.append(Choice('', none_option, None))
+
     for possibility in possibilities:
         print('  ({}) {}'.format(possibility.mnemonic, possibility.name))
+
     char = input('> ')
     answers = [p for p in possibilities if p.mnemonic == char]
 

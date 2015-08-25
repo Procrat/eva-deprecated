@@ -33,7 +33,10 @@ def new_project():
 @orm.db_session
 def new_task():
     content = ui.ask('What do you want to have done?')
-    db.Task(content=content)
+    project_choices = list(_generate_project_choices())
+    project = ui.let_choose('Is it part of a project?', project_choices,
+                            none_option='No')
+    db.Task(content=content, project=project)
 
 
 @Action('s', 'Open scratchpad')
@@ -66,6 +69,21 @@ def list_all():
         print('-----')
         for idea in db.Idea.select():
             print(idea)
+
+
+def _generate_project_choices():
+    mnemonics = {}
+    no_mnemonic_possible_counter = 0
+
+    for project in db.Project.select():
+        for letter in project.name.lower():
+            if letter not in mnemonics:
+                break
+        else:
+            letter = str(no_mnemonic_possible_counter)
+            no_mnemonic_possible_counter += 1
+
+        yield ui.Choice(letter, project.name, project)
 
 
 MAIN_ACTIONS = [
