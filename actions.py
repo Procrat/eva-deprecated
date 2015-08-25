@@ -57,17 +57,20 @@ def list_all():
             print(task)
         print()
 
-    if len(db.Task.select()):
+    # List tasks that aren't part of a project
+    tasks = orm.select(task for task in db.Task if task.project is None)
+    if tasks:
         print('TASKS')
         print('-----')
-        for task in db.Task.select():
+        for task in tasks:
             print(task)
         print()
 
-    if len(db.Idea.select()):
+    ideas = db.Idea.select()
+    if ideas:
         print('IDEAS')
         print('-----')
-        for idea in db.Idea.select():
+        for idea in ideas:
             print(idea)
 
 
