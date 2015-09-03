@@ -4,6 +4,10 @@ import subprocess
 import tempfile
 from collections import namedtuple
 
+YES_ANSWERS = ('y', 'yes', 'yep', 'yeah', 'sure', 'ok', 'affirmitive', 'aye',
+               'k', 'kay', 'okay', 'kk')
+NO_ANSWERS = ('n', 'no', 'nope', 'nop', 'nah', 'nein', 'negative')
+
 Choice = namedtuple('Choice', ('mnemonic', 'name', 'item'))
 
 
@@ -11,8 +15,22 @@ def ask(question: str) -> str:
     """Prints question and returns user input. Waits for newline."""
 
     print(question)
-    answer = input('> ')
+    answer = input('> ').strip()
     return answer
+
+
+def ask_polar_question(question: str) -> bool:
+    """Prints question (preferably a yes-no question) and returns a boolean
+    according to user input (yes = True, no = False).
+    """
+    while True:
+        answer = ask(question).lower()
+        if answer in YES_ANSWERS:
+            return True
+        elif answer in NO_ANSWERS:
+            return False
+        else:
+            print("Sorry, I couldn't understand that.")
 
 
 def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
@@ -27,7 +45,7 @@ def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
     for possibility in possibilities:
         print('  ({}) {}'.format(possibility.mnemonic, possibility.name))
 
-    char = input('> ')
+    char = input('> ').strip().lower()
     answers = [p for p in possibilities if p.mnemonic == char]
 
     if len(answers) == 1:

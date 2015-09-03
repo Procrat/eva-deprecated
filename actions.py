@@ -40,10 +40,25 @@ def new_project():
 @orm.db_session
 def new_task():
     content = ui.ask('What do you want to have done?')
+
+    if ui.ask_polar_question('Does it take less than two minutes?'):
+        print("Do it now! I'll wait.")
+        input('> ')
+        return
+
+    task = db.Task(content=content)
+
     project_choices = list(_generate_project_choices())
-    project = ui.let_choose('Is it part of a project?', project_choices,
-                            none_option='No')
-    db.Task(content=content, project=project)
+    task.project = ui.let_choose('Is it part of a project?', project_choices,
+                                 none_option='No')
+
+    if ui.ask_polar_question('Can it be devided in smaller chunks?'):
+        while True:
+            subtask_content = ui.ask('Like what?')
+            if not subtask_content:
+                break
+            subtask = db.Task(content=subtask_content, project=task.project)
+            task.subtasks.add(subtask)
 
 
 @Action('s', 'Open scratchpad')
@@ -79,6 +94,12 @@ def list_all():
         print('-----')
         for idea in ideas:
             print(idea)
+
+    scratchpad = db.get_scratchpad()
+    if scratchpad.content:
+        print('SCRATCHPAD')
+        print('----------')
+        print(scratchpad.content)
 
 
 def _generate_project_choices():
