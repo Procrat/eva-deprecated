@@ -100,13 +100,13 @@ def list_all():
 
     # List tasks that aren't part of a project
     tasks = orm.select(task for task in db.Task if task.project is None)
-    _list_objects(tasks, 'tasks')
+    _list_simple_objects(tasks, 'tasks')
 
     ideas = db.Idea.select()
-    _list_objects(ideas, 'ideas')
+    _list_simple_objects(ideas, 'ideas')
 
     reminders = db.Reminder.select().order_by(db.Reminder.when)
-    _list_objects(reminders, 'reminders')
+    _list_simple_objects(reminders, 'reminders')
 
     scratchpad = db.get_scratchpad()
     if scratchpad.content:
