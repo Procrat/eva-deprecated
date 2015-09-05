@@ -2,7 +2,6 @@
 This module handles easy date and time picking using timedelta, dateutil and
 relativedelta
 """
-import inspect
 import re
 from datetime import datetime
 from time import mktime
