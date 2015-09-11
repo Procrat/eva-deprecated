@@ -81,3 +81,18 @@ def ask_from_editor(initial_content: str) -> str:
               (editor, error.returncode, error.message))
     finally:
         os.remove(temp_path)
+
+
+def generate_choices(choices, name_selector, mnemonic_selector):
+    mnemonics = {}
+    no_mnemonic_possible_counter = 0
+
+    for choice in choices:
+        for letter in mnemonic_selector(choice):
+            if letter not in mnemonics:
+                break
+        else:
+            letter = str(no_mnemonic_possible_counter)
+            no_mnemonic_possible_counter += 1
+
+        yield Choice(letter, name_selector(choice), choice)

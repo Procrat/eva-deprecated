@@ -103,18 +103,9 @@ def list_all():
 
 
 def _generate_project_choices():
-    mnemonics = {}
-    no_mnemonic_possible_counter = 0
-
-    for project in db.Project.select():
-        for letter in project.name.lower():
-            if letter not in mnemonics:
-                break
-        else:
-            letter = str(no_mnemonic_possible_counter)
-            no_mnemonic_possible_counter += 1
-
-        yield ui.Choice(letter, project.name, project)
+    return ui.generate_choices(db.Project.select(),
+                               lambda project: project.name,
+                               lambda project: project.name.lower())
 
 
 MAIN_ACTIONS = [
