@@ -42,11 +42,7 @@ class Reminder(db.Entity):
     when = Required(datetime)
 
     def __str__(self):
-        s = '- {} @ {}'.format(
-            self.content,
-            date_utils.format(self.when),
-        )
-        return s
+        return '- {} @ {}'.format(self.content, date_utils.format(self.when))
 
 
 class Scratchpad(db.Entity):

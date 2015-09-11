@@ -1,6 +1,6 @@
 """
 This module handles easy date and time picking using timedelta, dateutil and
-relativedelta
+relativedelta.
 """
 from datetime import datetime
 from time import mktime
@@ -9,15 +9,15 @@ import parsedatetime
 
 
 def parse(datestring: str, default=None) -> datetime:
-    cal = parsedatetime.Calendar()
+    calendar = parsedatetime.Calendar()
 
-    time_struct, parse_status = cal.parse(datestring)
+    time_struct, parse_status = calendar.parse(datestring)
 
     # Parse returns 0 as parse_status if nothing is parsed
-    if parse_status:
-        return datetime.fromtimestamp(mktime(time_struct))
-    else:
-        None
+    if parse_status == 0:
+        return None
+
+    return datetime.fromtimestamp(mktime(time_struct))
 
 
 def format(dt: datetime) -> str:
