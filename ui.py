@@ -37,13 +37,19 @@ def ask_polar_question(question: str) -> bool:
 
 
 def pick_date(question: str) -> datetime:
-    """Prints question and returns a datetime."""
+    """Prints question and returns a datetime or None."""
 
     while True:
-        answer = date_utils.parse(ask(question).lower())
-        if answer:
-            if ask_polar_question("You will be reminded at {}. Affirmative?".format(date_utils.format(answer))):
-                return answer
+        answer = ask(question).lower()
+        if not answer:
+            return None
+
+        date = date_utils.parse(answer)
+        if date:
+            question = 'You will be reminded at {}.  Affirmative?'
+            question = question.format(date_utils.format(date))
+            if ask_polar_question(question):
+                return date
         else:
             print("Sorry, I couldn't understand that.")
 
