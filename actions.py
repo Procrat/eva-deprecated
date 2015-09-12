@@ -4,6 +4,7 @@ from pony import orm
 
 import db
 import ui
+import notifier
 
 
 def Action(mnemonic: str, name: str):
@@ -39,16 +40,17 @@ def new_project():
 @Action('r', 'New reminder')
 @orm.db_session
 def new_reminder():
-    content = ui.ask('What do you want me to reminde you of?')
+    content = ui.ask('What do you want me to remind you of?')
     if not content:
         return
-    when = ui.pick_date('When do you want to be reminded?')
+    when = ui.pick_date('When do you want to be reminded?',
+                        'You will be reminded at {}.')
     if not when:
         question = "Are you sure you don't want to be reminded?"
         if ui.ask_polar_question(question):
             return
     reminder = db.Reminder(content=content, when=when)
-    #TODO: Do something with the reminder
+    notifier.delayed_notify(reminder)
 
 
 @Action('t', 'New task')

@@ -15,6 +15,21 @@ Pomodoro, the Eisenhower scheme, flow, focussing on one task, small-chunking
 work, etc.
 
 
+## Installation
+
+Soon `setup.py` will cover dependencies, but for now please install
+dependencies manually.
+
+# Linux
+
+Make sure `libnotify` and `at` are installed. Also make sure the `at` daemon is
+running (and started on boot).
+
+# Mac OS
+
+Not fully supported yet.
+
+
 ## Usage
 
 At the moment you can just run `main.py` using Python 3.
