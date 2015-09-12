@@ -16,6 +16,18 @@ def quit():
     raise QuitException()
 
 
+@Action('w', 'What should I do now, Eva?')
+def what_now():
+    most_urgent = orm.select(task for task in db.Task
+                             if task.deadline == max(db.Task.deadline))
+    print('I suggest you {}'.format(most_urgent.content))
+    print("Tell me when you're finished or if you're stopping.")
+    input('> ')
+    if ui.ask_polar_question('Is it done?'):
+        print('Good job! ^_^')
+        most_urgent.delete()
+
+
 @Action('i', 'New long-term idea')
 @orm.db_session
 def new_idea():
@@ -138,6 +150,7 @@ def _ask_deadline():
 
 
 MAIN_ACTIONS = [
+    what_now,
     new_task,
     new_project,
     new_idea,
