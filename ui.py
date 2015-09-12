@@ -53,7 +53,9 @@ def pick_date(question: str, replay: str) -> datetime:
             print("Sorry, I couldn't understand that.")
 
 
-def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
+def let_choose(question: str,
+               possibilities: [Choice],
+               none_option=None) -> str:
     """Prints possibilities and lets user select one through a mnemonic."""
 
     print(question)
@@ -101,3 +103,29 @@ def ask_from_editor(initial_content: str) -> str:
               (editor, error.returncode, error.message))
     finally:
         os.remove(temp_path)
+
+
+def generate_choices(items, name_selector):
+    """
+    Generates choices with fitting mnemonics for a list of items.
+
+    Args:
+        items (List[X]): items to choose from
+        name_selector (Callable[[X], str]):
+            function that derives a name from an item
+    Yields:
+        Choice-objects for each item
+    """
+    mnemonics = {}
+    no_mnemonic_possible_counter = 0
+
+    for item in items:
+        name = name_selector(item)
+        for letter in name.lower():
+            if letter not in mnemonics:
+                break
+        else:
+            letter = str(no_mnemonic_possible_counter)
+            no_mnemonic_possible_counter += 1
+
+        yield Choice(letter, name, item)

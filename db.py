@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from pony.orm import Database, Optional, PrimaryKey, Required, Set
-
 import date_utils
+from pony.orm import Database, Optional, PrimaryKey, Required, Set
 
 db = Database()
 
@@ -10,6 +9,7 @@ db = Database()
 class Project(db.Entity):
     name = PrimaryKey(str)
     tasks = Set('Task', reverse='project')
+    deadline = Optional(datetime)
 
 
 class TodoItem(db.Entity):
@@ -24,6 +24,7 @@ class Task(db.TodoItem):
     project = Optional('Project', reverse='tasks')
     subtasks = Set('Task', reverse='parent_task')
     parent_task = Optional('Task', reverse='subtasks')
+    deadline = Optional(datetime)
 
     def __str__(self):
         s = '- {}'.format(self.content)

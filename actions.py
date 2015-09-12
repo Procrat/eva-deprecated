@@ -29,6 +29,8 @@ def new_project():
     name = ui.ask('What project are you planning on taking on?')
     project = db.Project(name=name)
 
+    project.deadline = _ask_deadline()
+
     # Ask for tasks in this project
     while True:
         task = ui.ask('What does this project consist of?')
@@ -68,6 +70,8 @@ def new_task():
     project_choices = list(_generate_project_choices())
     task.project = ui.let_choose('Is it part of a project?', project_choices,
                                  none_option='No')
+
+    task.deadline = _ask_deadline()
 
     if ui.ask_polar_question('Can it be devided in smaller chunks?'):
         while True:
@@ -124,18 +128,13 @@ def list_all():
 
 
 def _generate_project_choices():
-    mnemonics = {}
-    no_mnemonic_possible_counter = 0
+    return ui.generate_choices(db.Project.select(),
+                               lambda project: project.name)
 
-    for project in db.Project.select():
-        for letter in project.name.lower():
-            if letter not in mnemonics:
-                break
-        else:
-            letter = str(no_mnemonic_possible_counter)
-            no_mnemonic_possible_counter += 1
 
-        yield ui.Choice(letter, project.name, project)
+def _ask_deadline():
+    return ui.pick_date('When would you like to see this finished?',
+                        'All right, setting deadline at {}.')
 
 
 MAIN_ACTIONS = [
