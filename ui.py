@@ -3,6 +3,9 @@ import os
 import subprocess
 import tempfile
 from collections import namedtuple
+from datetime import datetime
+
+import date_utils
 
 YES_ANSWERS = ('y', 'yes', 'yep', 'yeah', 'sure', 'ok', 'affirmitive', 'aye',
                'k', 'kay', 'okay', 'kk')
@@ -29,6 +32,23 @@ def ask_polar_question(question: str) -> bool:
             return True
         elif answer in NO_ANSWERS:
             return False
+        else:
+            print("Sorry, I couldn't understand that.")
+
+
+def pick_date(question: str, replay: str) -> datetime:
+    """Prints question and returns a datetime or None."""
+
+    while True:
+        answer = ask(question).lower()
+        if not answer:
+            return None
+
+        date = date_utils.parse(answer)
+        if date:
+            replay = replay.format(date_utils.format(date))
+            if ask_polar_question(replay + '  Affirmative?'):
+                return date
         else:
             print("Sorry, I couldn't understand that.")
 

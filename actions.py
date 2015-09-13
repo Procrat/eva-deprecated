@@ -4,6 +4,7 @@ from pony import orm
 
 import db
 import ui
+import notifier
 
 
 def Action(mnemonic: str, name: str):
@@ -34,6 +35,22 @@ def new_project():
         if not task:
             break
         db.Task(content=task, project=project)
+
+
+@Action('r', 'New reminder')
+@orm.db_session
+def new_reminder():
+    content = ui.ask('What do you want me to remind you of?')
+    if not content:
+        return
+    when = ui.pick_date('When do you want to be reminded?',
+                        'You will be reminded at {}.')
+    if not when:
+        question = "Are you sure you don't want to be reminded?"
+        if ui.ask_polar_question(question):
+            return
+    reminder = db.Reminder(content=content, when=when)
+    notifier.delayed_notify(reminder)
 
 
 @Action('t', 'New task')
@@ -72,6 +89,16 @@ def open_scratchpad():
 @Action('l', 'List everything')
 @orm.db_session
 def list_all():
+    def _list_simple_objects(objects, title):
+        if not objects:
+            return
+
+        print(title.upper())
+        print('-' * len(title))
+        for object in objects:
+            print(object)
+        print()
+
     for project in db.Project.select():
         print(project.name.upper())
         print('-' * len(project.name))
@@ -81,19 +108,13 @@ def list_all():
 
     # List tasks that aren't part of a project
     tasks = orm.select(task for task in db.Task if task.project is None)
-    if tasks:
-        print('TASKS')
-        print('-----')
-        for task in tasks:
-            print(task)
-        print()
+    _list_simple_objects(tasks, 'tasks')
 
     ideas = db.Idea.select()
-    if ideas:
-        print('IDEAS')
-        print('-----')
-        for idea in ideas:
-            print(idea)
+    _list_simple_objects(ideas, 'ideas')
+
+    reminders = db.Reminder.select().order_by(db.Reminder.when)
+    _list_simple_objects(reminders, 'reminders')
 
     scratchpad = db.get_scratchpad()
     if scratchpad.content:
@@ -112,6 +133,7 @@ MAIN_ACTIONS = [
     new_task,
     new_project,
     new_idea,
+    new_reminder,
     open_scratchpad,
     list_all,
     quit,
