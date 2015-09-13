@@ -2,6 +2,12 @@ import platform
 import subprocess as sp
 from exceptions import MissingDependencyException
 
+if platform.system() == "Darwin":
+    from datetime import datetime
+    import objc
+    import Foundation
+
+
 APP_NAME = 'Eva'
 
 
@@ -47,11 +53,33 @@ def _delayed_notify_nix(reminder):
         raise MissingDependencyException('at')
 
 
-# TODO implement this, @Silox
-def _notify_mac(message):
-    pass
+def _notify_mac(message, sound=True, delay=None):
+    NSUserNotification = objc.lookUpClass('NSUserNotification')
+    NSUserNotificationCenter = objc.lookUpClass('NSUserNotificationCenter')
+
+    notification = NSUserNotification.alloc().init()
+    notification.setTitle_("{} reminds you to:".format(APP_NAME))
+    notification.setSubtitle_(message)
+    # TODO: Fill this in when we decide what to do with the notifications
+    # notification.setInformativeText_()
+    # TODO: Fill this in when we decide what actions we'd like to use
+    notification.setUserInfo_({})
+
+    if sound:
+        notification.setSoundName_("NSUserNotificationDefaultSoundName")
+    if delay:
+        notification.setDeliveryDate_(
+            Foundation.NSDate.dateWithTimeInterval_sinceDate_(
+                delay,
+                Foundation.NSDate.date()
+            )
+        )
+
+    NSUserNotificationCenter \
+       .defaultUserNotificationCenter() \
+       .scheduleNotification_(notification)
 
 
-# TODO implement this, @Silox
 def _delayed_notify_mac(reminder):
-    pass
+    td = reminder.when - datetime.now()
+    _notify_mac(reminder.content, delay=td.seconds)
