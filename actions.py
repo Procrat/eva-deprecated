@@ -28,6 +28,8 @@ def what_now():
 
     if not most_urgent:
         print("You're all done! Why don't you take a break? ^_^")
+        print("If you really don't have anything to do, maybe you can take a"
+              " look at your idea list?")
         return
 
     print('I suggest that you {}'.format(most_urgent.content))
