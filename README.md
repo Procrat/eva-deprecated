@@ -12,7 +12,7 @@ enough become an agenda / scheduler / focus booster / reminder, all in one.
 
 It borrows from various productivity and motivation concepts like GTD,
 Pomodoro, the Eisenhower scheme, flow, focussing on one task, small-chunking
-work, etc.
+work, eating the frog, etc.
 
 
 ## Installation
@@ -20,12 +20,12 @@ work, etc.
 Soon `setup.py` will cover dependencies, but for now please install
 dependencies manually.
 
-# Linux
+### Linux
 
 Make sure `libnotify` and `at` are installed. Also make sure the `at` daemon is
 running (and started on boot).
 
-# Mac OS
+### Mac OS
 
 Not fully supported yet.
 

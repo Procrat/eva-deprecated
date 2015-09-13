@@ -16,7 +16,7 @@
     - How long will it take? + How important (pos impact) is it?
         + How urgent is it? Deadline?
         -> Schedule (with google agenda?)
-- Choose task to do NOW
+- Choose task to do NOW (eat the frog)
 - Pomodoro (single task)
     - Reschedule stuff when other things get in the way
     - Ask why you stopped doing something
