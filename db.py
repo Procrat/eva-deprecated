@@ -14,6 +14,9 @@ class MetadataMixin(db.Base):
     deadline = Optional(datetime)
     importance = Optional(int)
 
+    def has_metadata(self):
+        return self.deadline is not None or self.importance is not None
+
     def metadata_str(self):
         metadata = []
         if self.deadline is not None:
@@ -26,6 +29,17 @@ class MetadataMixin(db.Base):
 class Project(db.MetadataMixin):
     name = Required(str, index=True)
     tasks = Set('Task', reverse='project')
+
+    def __str__(self):
+        s = self.name.upper() + '\n'
+        if self.has_metadata():
+            s += ' [{}]'.format(self.metadata_str())
+        s += '-' * len(self.name) + '\n'
+
+        s += '\n'.join(str(task) for task in self.tasks)
+        s += '\n'
+
+        return s
 
 
 class TodoItem(db.Base):
@@ -42,6 +56,8 @@ class Task(db.TodoItem, db.MetadataMixin):
 
     def __str__(self):
         s = '- {}'.format(self.content)
+        if self.has_metadata():
+            s += ' [{}]'.format(self.metadata_str())
         s += '\n  '.join(str(task.content.split('\n'))
                          for task in self.subtasks)
         return s

@@ -131,14 +131,7 @@ def list_all():
         print()
 
     for project in db.Project.select():
-        header = project.name.upper()
-        if project.deadline:
-            header += ' [{}]'.format(project.deadline)
-        print(header)
-        print('-' * len(project.name))
-        for task in project.tasks:
-            print(task)
-        print()
+        print(project)
 
     # List tasks that aren't part of a project
     tasks = orm.select(task for task in db.Task if task.project is None)
