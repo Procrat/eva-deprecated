@@ -8,8 +8,9 @@ from datetime import datetime
 import date_utils
 
 YES_ANSWERS = ('y', 'yes', 'yep', 'yeah', 'sure', 'ok', 'affirmitive', 'aye',
-               'k', 'kay', 'okay', 'kk')
-NO_ANSWERS = ('n', 'no', 'nope', 'nop', 'nah', 'nein', 'negative')
+               'k', 'kay', 'okay', 'kk', 'uhu')
+NO_ANSWERS = ('n', 'no', 'nope', 'nop', 'nah', 'nein', 'negative',
+              'not really')
 
 Choice = namedtuple('Choice', ('mnemonic', 'name', 'item'))
 
