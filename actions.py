@@ -16,13 +16,19 @@ def quit():
     raise QuitException()
 
 
-@Action('w', 'What should I do now, Eva?')
+@Action('w', "I don't know. What should I do, Eva?")
+@orm.db_session
 def what_now():
-    most_urgent = orm.select(task for task in db.Task
-                             if task.deadline == max(db.Task.deadline))
-    print('I suggest you {}'.format(most_urgent.content))
+    most_urgent = orm.max(db.Task.select(), key=lambda task: task.deadline)
+
+    if not most_urgent:
+        print("You're all done! Why don't you take a break? ^_^")
+        return
+
+    print('I suggest that you {}'.format(most_urgent.content))
     print("Tell me when you're finished or if you're stopping.")
     input('> ')
+
     if ui.ask_polar_question('Is it done?'):
         print('Good job! ^_^')
         most_urgent.delete()
@@ -80,8 +86,10 @@ def new_task():
     task = db.Task(content=content)
 
     project_choices = list(_generate_project_choices())
-    task.project = ui.let_choose('Is it part of a project?', project_choices,
-                                 none_option='No')
+    if project_choices:
+        task.project = ui.let_choose('Is it part of a project?',
+                                     project_choices,
+                                     none_option='No')
 
     task.deadline = _ask_deadline()
 
