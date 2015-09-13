@@ -126,8 +126,8 @@ def list_all():
 
         print(title.upper())
         print('-' * len(title))
-        for object in objects:
-            print(object)
+        for object_ in objects:
+            print(object_)
         print()
 
     for project in db.Project.select():
