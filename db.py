@@ -22,7 +22,7 @@ class MetadataMixin(db.Base):
         if self.deadline is not None:
             metadata.append(date_utils.format(self.deadline))
         if self.importance is not None:
-            metadata.append(str(self.importance))
+            metadata.append('I: ' + str(self.importance))
         return ', '.join(metadata)
 
 

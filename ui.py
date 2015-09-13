@@ -37,6 +37,25 @@ def ask_polar_question(question: str) -> bool:
             print("Sorry, I couldn't understand that.")
 
 
+def ask_on_scale(question: str, range_=range(1, 11)) -> int:
+    """Prints question (preferably asking for a number on a scale) and keeps
+    asking until the user inputs a number or nothing.
+    """
+    while True:
+        answer = ask(question)
+        if answer == '':
+            return None
+
+        try:
+            parsed_answer = int(answer)
+            if parsed_answer in range_:
+                return parsed_answer
+
+            print('Sorry, that number is not on the scale.')
+        except ValueError:
+            print("Sorry, I couldn't understand that.")
+
+
 def pick_date(question: str, replay_template: str) -> datetime:
     """Prints question and returns a datetime or None."""
 

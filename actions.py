@@ -33,8 +33,7 @@ def what_now():
         return
 
     print('I suggest that you {}'.format(most_urgent.content))
-    print("Tell me when you're finished or if you're stopping.")
-    input('> ')
+    ui.ask("Tell me when you're finished or if you're stopping.")
 
     if ui.ask_polar_question('Is it done?'):
         print('Good job! ^_^')
@@ -55,6 +54,8 @@ def new_project():
     project = db.Project(name=name)
 
     project.deadline = _ask_deadline()
+
+    project.importance = _ask_importance()
 
     # Ask for tasks in this project
     while True:
@@ -86,8 +87,7 @@ def new_task():
     content = ui.ask('What do you want to have done?')
 
     if ui.ask_polar_question('Does it take less than two minutes?'):
-        print("Do it now! I'll wait.")
-        input('> ')
+        ui.ask("Do it now! I'll wait.")
         return
 
     task = db.Task(content=content)
@@ -99,6 +99,8 @@ def new_task():
                                      none_option='No')
 
     task.deadline = _ask_deadline()
+
+    task.importance = _ask_importance()
 
     if ui.ask_polar_question('Can it be devided in smaller chunks?'):
         while True:
@@ -158,6 +160,10 @@ def _generate_project_choices():
 def _ask_deadline():
     return ui.pick_date('When would you like to see this finished?',
                         'All right, setting deadline at {}.')
+
+
+def _ask_importance():
+    return ui.ask_on_scale('On a scale from 1 to 10, how important is this?')
 
 
 MAIN_ACTIONS = [
