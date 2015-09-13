@@ -19,7 +19,12 @@ def quit():
 @Action('w', "I don't know. What should I do, Eva?")
 @orm.db_session
 def what_now():
-    most_urgent = orm.max(db.Task.select(), key=lambda task: task.deadline)
+    try:
+        deadlined_tasks = (t for t in db.Task.select()
+                           if t.deadline is not None)
+        most_urgent = orm.max(deadlined_tasks, key=lambda task: task.deadline)
+    except ValueError:
+        most_urgent = None
 
     if not most_urgent:
         print("You're all done! Why don't you take a break? ^_^")
