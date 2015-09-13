@@ -124,7 +124,10 @@ def list_all():
         print()
 
     for project in db.Project.select():
-        print(project.name.upper())
+        header = project.name.upper()
+        if project.deadline:
+            header += ' [{}]'.format(project.deadline)
+        print(header)
         print('-' * len(project.name))
         for task in project.tasks:
             print(task)
