@@ -36,7 +36,7 @@ def ask_polar_question(question: str) -> bool:
             print("Sorry, I couldn't understand that.")
 
 
-def pick_date(question: str, replay: str) -> datetime:
+def pick_date(question: str, replay_template: str) -> datetime:
     """Prints question and returns a datetime or None."""
 
     while True:
@@ -46,7 +46,7 @@ def pick_date(question: str, replay: str) -> datetime:
 
         date = date_utils.parse(answer)
         if date:
-            replay = replay.format(date_utils.format(date))
+            replay = replay_template.format(date_utils.format(date))
             if ask_polar_question(replay + '  Affirmative?'):
                 return date
         else:
