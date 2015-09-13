@@ -12,7 +12,23 @@ enough become an agenda / scheduler / focus booster / reminder, all in one.
 
 It borrows from various productivity and motivation concepts like GTD,
 Pomodoro, the Eisenhower scheme, flow, focussing on one task, small-chunking
-work, etc.
+work, eating the frog, etc.
+
+
+## Installation
+
+Soon `setup.py` will cover dependencies, but for now please install
+dependencies manually.
+`pip install -r requirements.txt`
+
+### Linux
+
+Make sure `libnotify` and `at` are installed. Also make sure the `at` daemon is
+running (and started on boot).
+
+### Mac OS
+
+Run `pip install -r requirements_osx.txt`
 
 
 ## Usage
@@ -22,5 +38,8 @@ At the moment you can just run `main.py` using Python 3.
 
 ## Acknowledgements
 
-Many thanks to [Personal Productivity @StackExchange](http://productivity.stackexchange.com), [zen habits](http://zenhabits.net) and [GTD](http://gettingthingsdone.com) for
-inspiring me!
+Many thanks to
+[Personal Productivity @StackExchange](http://productivity.stackexchange.com),
+[zen habits](http://zenhabits.net)
+and [GTD](http://gettingthingsdone.com)
+for inspiring me!
