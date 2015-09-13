@@ -76,10 +76,10 @@ def _notify_mac(message, sound=True, delay=None):
         )
 
     NSUserNotificationCenter \
-       .defaultUserNotificationCenter() \
-       .scheduleNotification_(notification)
+        .defaultUserNotificationCenter() \
+        .scheduleNotification_(notification)
 
 
 def _delayed_notify_mac(reminder):
     td = reminder.when - datetime.now()
-    _notify_mac(reminder.content, delay=td.seconds)
+    _notify_mac(reminder.content, delay=td.total_seconds())
