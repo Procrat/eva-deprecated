@@ -23,16 +23,18 @@ def parse_datetime(datestring: str, default=None) -> datetime:
 
 
 def parse_timedelta(timedelta_str: str) -> timedelta:
-    match = re.fullmatch(r'(\d+)h((\d+)m)?', timedelta_str.strip())
+    regex = r'(about\s*)?((\d+)\s*h(ours?)?)?\s*((\d+)\s*m(inutes?)?)?'
+    match = re.fullmatch(regex, timedelta_str.strip().lower())
+
     if match is None:
         return None
 
-    hours_str = match.group(1)
+    hours_str = match.group(3)
     if hours_str is None:
         return None
     hours = int(hours_str)
 
-    minutes_str = match.group(3)
+    minutes_str = match.group(6)
     minutes = int(minutes_str) if minutes_str is not None else 0
 
     return timedelta(hours=hours, minutes=minutes)
