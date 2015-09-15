@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import date_utils
 from pony.orm import Database, Optional, PrimaryKey, Required, Set
@@ -12,15 +12,20 @@ class Base(db.Entity):
 
 class MetadataMixin(db.Base):
     deadline = Optional(datetime)
+    duration = Optional(timedelta)
     importance = Optional(int)
 
     def has_metadata(self):
-        return self.deadline is not None or self.importance is not None
+        return (self.deadline is not None or
+                self.duration is not None or
+                self.importance is not None)
 
     def metadata_str(self):
         metadata = []
         if self.deadline is not None:
             metadata.append(date_utils.format(self.deadline))
+        if self.duration is not None:
+            metadata.append('D: ' + date_utils.format(self.duration))
         if self.importance is not None:
             metadata.append('I: ' + str(self.importance))
         return ', '.join(metadata)

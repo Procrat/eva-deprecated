@@ -3,7 +3,7 @@ import os
 import subprocess
 import tempfile
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import date_utils
 
@@ -64,11 +64,26 @@ def pick_date(question: str, replay_template: str) -> datetime:
         if not answer:
             return None
 
-        date = date_utils.parse(answer)
+        date = date_utils.parse_datetime(answer)
         if date:
             replay = replay_template.format(date_utils.format(date))
             if ask_polar_question(replay + '  Affirmative?'):
                 return date
+        else:
+            print("Sorry, I couldn't understand that.")
+
+
+def ask_timedelta(question: str) -> timedelta:
+    """Prints question and returns a timedelta or None."""
+
+    while True:
+        answer = ask(question).lower()
+        if not answer:
+            return None
+
+        delta = date_utils.parse_timedelta(answer)
+        if delta:
+            return delta
         else:
             print("Sorry, I couldn't understand that.")
 

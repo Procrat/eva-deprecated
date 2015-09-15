@@ -102,12 +102,15 @@ def new_task():
 
     task.importance = _ask_importance()
 
+    task.duration = _ask_duration()
+
     if ui.ask_polar_question('Can it be devided in smaller chunks?'):
         while True:
             subtask_content = ui.ask('Like what?')
             if not subtask_content:
                 break
             subtask = db.Task(content=subtask_content, project=task.project)
+            subtask.duration = _ask_duration()
             task.subtasks.add(subtask)
 
 
@@ -164,6 +167,10 @@ def _ask_deadline():
 
 def _ask_importance():
     return ui.ask_on_scale('On a scale from 1 to 10, how important is this?')
+
+
+def _ask_duration():
+    return ui.ask_timedelta('How long do you think it will take?')
 
 
 MAIN_ACTIONS = [

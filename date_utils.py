@@ -3,12 +3,14 @@ This module handles easy date and time picking using timedelta, dateutil and
 relativedelta.
 """
 from datetime import datetime, timedelta
+from functools import singledispatch
+import re
 from time import mktime
 
 import parsedatetime
 
 
-def parse(datestring: str, default=None) -> datetime:
+def parse_datetime(datestring: str, default=None) -> datetime:
     calendar = parsedatetime.Calendar()
 
     time_struct, parse_status = calendar.parse(datestring)
@@ -20,12 +22,51 @@ def parse(datestring: str, default=None) -> datetime:
     return datetime.fromtimestamp(mktime(time_struct))
 
 
-def format(dt: datetime) -> str:
+def parse_timedelta(timedelta_str: str) -> timedelta:
+    match = re.fullmatch(r'(\d+)h((\d+)m)?', timedelta_str.strip())
+    if match is None:
+        return None
+
+    hours_str = match.group(1)
+    if hours_str is None:
+        return None
+    hours = int(hours_str)
+
+    minutes_str = match.group(3)
+    minutes = int(minutes_str) if minutes_str is not None else 0
+
+    return timedelta(hours=hours, minutes=minutes)
+
+
+@singledispatch
+def format(arg) -> str:
+    raise ValueError
+
+
+@format.register(datetime)
+def _(dt: datetime) -> str:
+    def format_time():
+        if dt.minute == 0:
+            return '{}h'.format(dt.hour)
+        else:
+            return dt.strftime('%H:%M')
+
+    def format_date():
+        return dt.strftime('%d-%m')
+
     if dt.date() == datetime.now().date():
-        return dt.strftime('%H:%M')
+        return format_time()
     elif dt.date() == (datetime.now() + timedelta(days=1)).date():
-        return dt.strftime('%H:%M tomorrow')
+        return format_time() + ' tomorrow'
     elif dt.date() <= (datetime.now() + timedelta(days=3)).date():
-        return dt.strftime('%d-%m-%Y %H:%M')
+        return format_date() + ' ' + format_time()
     else:
-        return dt.strftime('%d-%m-%Y')
+        return format_date()
+
+
+@format.register(timedelta)
+def _(td: timedelta) -> str:
+    total_seconds = int(td.total_seconds())
+    hours = total_seconds // 3600
+    minutes = (total_seconds // 60) - (60 * hours)
+    return '{}h'.format(hours) + ('{}m'.format(minutes) if minutes > 0 else '')
