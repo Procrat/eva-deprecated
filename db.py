@@ -14,21 +14,26 @@ class MetadataMixin(db.Base):
     deadline = Optional(datetime)
     duration = Optional(timedelta)
     importance = Optional(int)
+    waiting_for = Optional(str)
 
     def has_metadata(self):
         return (self.deadline is not None or
                 self.duration is not None or
-                self.importance is not None)
+                self.importance is not None or
+                self.waiting_for is not None)
+
+    def metadata(self):
+        if self.waiting_for is not None:
+            yield 'Waiting for {}'.format(self.waiting_for)
+        if self.deadline is not None:
+            yield date_utils.format(self.deadline)
+        if self.duration is not None:
+            yield 'D: ' + date_utils.format(self.duration)
+        if self.importance is not None:
+            yield 'I: ' + str(self.importance)
 
     def metadata_str(self):
-        metadata = []
-        if self.deadline is not None:
-            metadata.append(date_utils.format(self.deadline))
-        if self.duration is not None:
-            metadata.append('D: ' + date_utils.format(self.duration))
-        if self.importance is not None:
-            metadata.append('I: ' + str(self.importance))
-        return ', '.join(metadata)
+        return ', '.join(self.metadata())
 
 
 class Project(db.MetadataMixin):
@@ -60,7 +65,7 @@ class Task(db.TodoItem, db.MetadataMixin):
     parent_task = Optional('Task', reverse='subtasks')
 
     def __str__(self):
-        s = '- {}'.format(self.content)
+        s = '- ' + self.content
         if self.has_metadata():
             s += ' [{}]'.format(self.metadata_str())
         s += '\n  '.join(str(task.content.split('\n'))

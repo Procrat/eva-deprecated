@@ -19,25 +19,31 @@ def quit():
 @Action('w', "I don't know. What should I do, Eva?")
 @orm.db_session
 def what_now():
-    try:
-        deadlined_tasks = (t for t in db.Task.select()
-                           if t.deadline is not None)
-        most_urgent = orm.max(deadlined_tasks, key=lambda task: task.deadline)
-    except ValueError:
-        most_urgent = None
+    task = _most_urgent() or _most_important()
 
-    if not most_urgent:
+    if not task:
         print("You're all done! Why don't you take a break? ^_^")
         print("If you really don't have anything to do, maybe you can take a"
               " look at your idea list?")
         return
 
-    print('I suggest that you {}'.format(most_urgent.content))
-    ui.ask("Tell me when you're finished or if you're stopping.")
+    print('I suggest that you {}'.format(task.content))
+    if ui.ask_polar_question('Do you wanna do this?'):
+        ui.ask("Tell me when you're finished or if you're stopping.")
 
-    if ui.ask_polar_question('Is it done?'):
-        print('Good job! ^_^')
-        most_urgent.delete()
+        if ui.ask_polar_question('Is it done?'):
+            print('Good job! ^_^')
+            task.delete()
+    else:
+        @Action('w', "I'm waiting for something.")
+        def waiting_for():
+            task.waiting_for = ui.ask('What are you waiting for?')
+            print('All right, noted. If you need to poke someone for this or'
+                  ' if you can easily speed this up, do it now.')
+
+        reason = ui.let_choose('Why not?', [waiting_for], none_option='Meh')
+        if reason is not None:
+            reason()
 
 
 @Action('i', 'New long-term idea')
@@ -171,6 +177,25 @@ def _ask_importance():
 
 def _ask_duration():
     return ui.ask_timedelta('How long do you think it will take?')
+
+
+def _most_urgent():
+    try:
+        deadlined_tasks = (t for t in db.Task.select()
+                           if t.deadline is not None and t.waiting_for is None)
+        return orm.max(deadlined_tasks, key=lambda task: task.deadline)
+    except ValueError:
+        return None
+
+
+def _most_important():
+    try:
+        important_tasks = (t for t in db.Task.select()
+                           if t.importance is not None and
+                           t.waiting_for is None)
+        return orm.max(important_tasks, key=lambda task: task.importance)
+    except ValueError:
+        return None
 
 
 MAIN_ACTIONS = [
