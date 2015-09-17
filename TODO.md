@@ -1,22 +1,13 @@
 # TODO
 
 ## Short term ideas
-- Notifications
-- Reminders
 - Capture everything: recurring tasks
-- Scheduling
-- Reflect: overview, progress
-- What do you wanna do (or have done) today?
+- Scheduling (with Google Calendar?)
+- Reflect: calendar, progress
 - How much work can you do in a day?
-- Project or single task?
-    - Project: Divide in smaller steps
-    - Single task: add to todo-list
-    - Less than two minutes: now
-    - Delegatable? -> Waiting for-task
-    - How long will it take? + How important (pos impact) is it?
-        + How urgent is it? Deadline?
-        -> Schedule (with google agenda?)
-- Choose task to do NOW (eat the frog)
+- Flow on adding a task
+    - If urgent, not that important, but delegatable?
+        -> Delegate: make a waiting-for-task
 - Pomodoro (single task)
     - Reschedule stuff when other things get in the way
     - Ask why you stopped doing something
@@ -59,3 +50,15 @@
 
 # Done
 - Capture everything: todo, projects, ideas, recurring tasks, scratchpad
+- Notifications
+- Reminders
+- Reflect: overview
+- What do you wanna do (or have done) today?
+- Choose task to do NOW (eat the frog)
+- Flow on adding a task
+    - Project or single task?
+    - Project: Divide in smaller steps
+    - Less than two minutes: now
+    - Delegatable? -> Waiting for-task
+    - How long will it take? + How important (pos impact) is it?
+        + How urgent is it? Deadline?
