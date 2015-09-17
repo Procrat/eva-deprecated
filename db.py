@@ -1,4 +1,8 @@
-from pony.orm import Database, Required, Set, Optional, PrimaryKey
+from datetime import datetime
+
+from pony.orm import Database, Optional, PrimaryKey, Required, Set
+
+import date_utils
 
 db = Database()
 
@@ -30,6 +34,15 @@ class Task(db.TodoItem):
 
 class Idea(db.TodoItem):
     pass
+
+
+class Reminder(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    content = Required(str)
+    when = Required(datetime)
+
+    def __str__(self):
+        return '- {} @ {}'.format(self.content, date_utils.format(self.when))
 
 
 class Scratchpad(db.Entity):
