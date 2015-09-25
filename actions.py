@@ -69,7 +69,7 @@ def new_task():
     task.project = ui.let_choose('Is it part of a project?', project_choices,
                                  none_option='No')
 
-    if ui.ask_polar_question('Can it be devided in smaller chunks?'):
+    if ui.ask_polar_question('Can it be divided in smaller chunks?'):
         while True:
             subtask_content = ui.ask('Like what?')
             if not subtask_content:
