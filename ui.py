@@ -21,6 +21,10 @@ def ask(question: str) -> str:
     answer = input('> ').strip()
     return answer
 
+def show(announcement: str) -> None:
+    """prints announcement"""
+
+    print(announcement)
 
 def ask_polar_question(question: str) -> bool:
     """Prints question (preferably a yes-no question) and returns a boolean

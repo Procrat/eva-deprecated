@@ -5,7 +5,7 @@ from pony import orm
 import db
 import ui
 import notifier
-
+import re
 
 def Action(mnemonic: str, name: str):
     return lambda run: ui.Choice(mnemonic, name, run)
@@ -28,11 +28,11 @@ def new_idea():
 def new_project():
     name = ui.ask('What project are you planning on taking on?')
     project = db.Project(name=name)
-
+    ui.show("If you're finished just say 'Ready' :) ")
     # Ask for tasks in this project
     while True:
         task = ui.ask('What does this project consist of?')
-        if not task:
+        if re.match("[rR]eady",task) != None:
             break
         db.Task(content=task, project=project)
 
