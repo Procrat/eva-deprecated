@@ -6,6 +6,7 @@ import db
 import ui
 import notifier
 import re
+import utils
 
 def Action(mnemonic: str, name: str):
     return lambda run: ui.Choice(mnemonic, name, run)
@@ -66,7 +67,7 @@ def new_task():
     task = db.Task(content=content)
 
     project_choices = list(_generate_project_choices())
-    task.project = ui.let_choose('Is it part of a project?', project_choices,
+    task.project, _ = ui.let_choose('Is it part of a project?', project_choices,
                                  none_option='No')
 
     if ui.ask_polar_question('Can it be divided in smaller chunks?'):
@@ -88,8 +89,9 @@ def open_scratchpad():
 
 @Action('l', 'List everything')
 @orm.db_session
-def list_all():
+def list_all(param="all"):
     def _list_simple_objects(objects, title):
+        """print title separated from newlined objects """
         if not objects:
             return
 
@@ -99,22 +101,14 @@ def list_all():
             print(object)
         print()
 
-    for project in db.Project.select():
-        print(project.name.upper())
-        print('-' * len(project.name))
-        for task in project.tasks:
-            print(task)
-        print()
+    d = utils.regexdict(lambda name: (lambda: list_project(name)))
+    d.data = {
+        'reminder': list_reminders,
+    }
+    return d[param]()
 
-    # List tasks that aren't part of a project
-    tasks = orm.select(task for task in db.Task if task.project is None)
-    _list_simple_objects(tasks, 'tasks')
 
-    ideas = db.Idea.select()
-    _list_simple_objects(ideas, 'ideas')
-
-    reminders = db.Reminder.select().order_by(db.Reminder.when)
-    _list_simple_objects(reminders, 'reminders')
+def show_scratchpad():
 
     scratchpad = db.get_scratchpad()
     if scratchpad.content:
@@ -122,6 +116,36 @@ def list_all():
         print('----------')
         print(scratchpad.content)
 
+def list_reminders():
+
+    reminders = db.Reminder.select().order_by(db.Reminder.when)
+    _list_simple_objects(reminders, 'reminders')
+
+def list_ideas():
+
+    ideas = db.Idea.select()
+    _list_simple_objects(ideas, 'ideas')
+
+def list_tasks():
+
+    tasks = orm.select(task for task in db.Task if task.project is None)
+    _list_simple_objects(tasks, 'tasks')
+
+def list_project(projectname):
+    project = orm.get(project for project in db.Project if project.name == projectname)
+    if project is None:
+        print("There isn't any project called '%s'" % projectname)
+    print(project.name.upper())
+    print('-' * len(project.name))
+    for task in project.tasks:
+        print(task)
+    print()
+
+def list_projects():
+
+    for project in db.Project.select():
+        print(project.name)
+        print()
 
 def _generate_project_choices():
     return ui.generate_choices(db.Project.select(),

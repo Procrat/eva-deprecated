@@ -13,10 +13,10 @@ def setup():
 def main():
     try:
         while True:
-            action = ui.let_choose('What do you want to do?',
+            action, param = ui.let_choose('What do you want to do?',
                                    actions.MAIN_ACTIONS)
             if action is not None:
-                action()
+                action(*param)
             print()
     except (exceptions.QuitException, KeyboardInterrupt):
         pass

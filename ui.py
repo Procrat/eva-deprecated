@@ -69,13 +69,14 @@ def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
     for possibility in possibilities:
         print('  ({}) {}'.format(possibility.mnemonic, possibility.name))
 
-    char = input('> ').strip().lower()
+    cmd = input('> ').strip().lower()
+    char, *param = cmd.split(maxsplit=1)
     answers = [p for p in possibilities if p.mnemonic == char]
 
     if len(answers) == 1:
-        return answers[0].item
+        return answers[0].item, param
     elif len(answers) < 1:
-        return None
+        return None, None
     else:  # > 1
         raise exceptions.MultipleChoicesWithSameMnemonicException()
 
