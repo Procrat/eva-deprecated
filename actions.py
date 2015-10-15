@@ -92,7 +92,12 @@ def open_scratchpad():
 def list_all(param="all"):
 
     d = utils.regexdict(lambda name: (lambda: list_project(name)))
-    d['reminder'] = list_reminders
+    #d['reminder'] = list_reminders
+    d.update(remind=list_reminders, 
+            scratch=show_scratchpad,
+            id=list_ideas,
+            ta=list_tasks,
+            projects=list_projects)
     return d[param]()
 
 def _list_simple_objects(objects, title):
