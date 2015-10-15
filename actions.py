@@ -90,23 +90,21 @@ def open_scratchpad():
 @Action('l', 'List everything')
 @orm.db_session
 def list_all(param="all"):
-    def _list_simple_objects(objects, title):
-        """print title separated from newlined objects """
-        if not objects:
-            return
-
-        print(title.upper())
-        print('-' * len(title))
-        for object in objects:
-            print(object)
-        print()
 
     d = utils.regexdict(lambda name: (lambda: list_project(name)))
-    d.data = {
-        'reminder': list_reminders,
-    }
+    d['reminder'] = list_reminders
     return d[param]()
 
+def _list_simple_objects(objects, title):
+    """print title separated from newlined objects """
+    if not objects:
+        return
+
+    print(title.upper())
+    print('-' * len(title))
+    for object in objects:
+        print(object)
+    print()
 
 def show_scratchpad():
 
