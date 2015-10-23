@@ -35,6 +35,25 @@ class MetadataMixin(db.Base):
     def metadata_str(self):
         return ', '.join(self.metadata())
 
+    def urgency(self):
+        """Does a guess of the urgency on a scale of 1 to 10."""
+
+        # TODO: should be a bit more intelligent than this
+        # Current heuristic:
+        #     10 + log2(hours needed / hours left before deadline)
+
+        time_left = self.deadline - datetime.now()
+        hours_left = (time_left.days * timedelta(hours=4) +
+                      time_left.seconds / 3600)
+        raw_urgency = 10 + math.log2(self.duration / hours_left)
+        return max(10, min(1, raw_urgency))
+
+    def is_urgent(self):
+        return self.urgency() >= 5
+
+    def is_important(self):
+        return self.importance >= 5
+
 
 class Project(db.MetadataMixin):
     name = Required(str, index=True)

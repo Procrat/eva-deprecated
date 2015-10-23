@@ -110,6 +110,9 @@ def new_task():
 
     task.duration = _ask_duration()
 
+    if task.is_urgent() and not task.is_important():
+        task.waiting_for = _ask_delegation()
+
     if ui.ask_polar_question('Can it be devided in smaller chunks?'):
         while True:
             subtask_content = ui.ask('Like what?')
@@ -177,6 +180,13 @@ def _ask_importance():
 
 def _ask_duration():
     return ui.ask_timedelta('How long do you think it will take?')
+
+
+def _ask_delegation():
+    print('This task is urgent but not that important. You should delegate it'
+          ' if possible.')
+    return ui.ask('Who will you delegate this to?'
+                  ' (Just hit enter for no one.)')
 
 
 def _most_urgent():
