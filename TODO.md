@@ -5,9 +5,6 @@
 - Scheduling (with Google Calendar?)
 - Reflect: calendar, progress
 - How much work can you do in a day?
-- Flow on adding a task
-    - If urgent, not that important, but delegatable?
-        -> Delegate: make a waiting-for-task
 - Pomodoro (single task)
     - Reschedule stuff when other things get in the way
     - Ask why you stopped doing something

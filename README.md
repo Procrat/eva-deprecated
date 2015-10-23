@@ -19,6 +19,7 @@ work, eating the frog, etc.
 
 Soon `setup.py` will cover dependencies, but for now please install
 dependencies manually.
+`pip install -r requirements.txt`
 
 ### Linux
 
@@ -27,7 +28,7 @@ running (and started on boot).
 
 ### Mac OS
 
-Not fully supported yet.
+Run `pip install -r requirements_osx.txt`
 
 
 ## Usage
@@ -37,5 +38,8 @@ At the moment you can just run `main.py` using Python 3.
 
 ## Acknowledgements
 
-Many thanks to [Personal Productivity @StackExchange](http://productivity.stackexchange.com), [zen habits](http://zenhabits.net) and [GTD](http://gettingthingsdone.com) for
-inspiring me!
+Many thanks to
+[Personal Productivity @StackExchange](http://productivity.stackexchange.com),
+[zen habits](http://zenhabits.net)
+and [GTD](http://gettingthingsdone.com)
+for inspiring me!

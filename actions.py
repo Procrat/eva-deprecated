@@ -113,7 +113,7 @@ def new_task():
     if task.is_urgent() and not task.is_important():
         task.waiting_for = _ask_delegation()
 
-    if ui.ask_polar_question('Can it be devided in smaller chunks?'):
+    if ui.ask_polar_question('Can it be divided in smaller chunks?'):
         while True:
             subtask_content = ui.ask('Like what?')
             if not subtask_content:
