@@ -1,8 +1,10 @@
-from datetime import datetime, timedelta
 import math
+from datetime import datetime, timedelta
+
+from pony import orm
+from pony.orm import Database, Optional, Required, Set
 
 import date_utils
-from pony.orm import Database, Optional, PrimaryKey, Required, Set
 
 db = Database()
 
@@ -109,6 +111,17 @@ class Scratchpad(db.Entity):
     content = Optional(str)
 
 
+@orm.db_session
 def get_scratchpad() -> Scratchpad:
-    query_result = Scratchpad.select().for_update()[:1]
+    query_result = Scratchpad.select()[:1]
     return query_result[0] if query_result else Scratchpad(content='')
+
+
+@orm.db_session
+def get_scratchpad_content() -> str:
+    return get_scratchpad().content
+
+
+@orm.db_session
+def set_scratchpad_content(new_content):
+    get_scratchpad().content = new_content
