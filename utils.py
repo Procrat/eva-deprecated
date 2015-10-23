@@ -3,10 +3,11 @@ import re
 
 
 class regexdict(defaultdict):
+    """Maps regexes to some values."""
 
     def __getitem__(self, key):
         for regex in self.keys():
-            if re.search(regex, key, re.IGNORECASE) != None:
+            if re.match(regex, key, re.IGNORECASE) is not None:
                 return super().__getitem__(regex)
         return self.__missing__(key)
 

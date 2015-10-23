@@ -21,10 +21,12 @@ def ask(question: str) -> str:
     answer = input('> ').strip()
     return answer
 
+
 def show(announcement: str) -> None:
-    """prints announcement"""
+    """Prints announcement."""
 
     print(announcement)
+
 
 def ask_polar_question(question: str) -> bool:
     """Prints question (preferably a yes-no question) and returns a boolean
@@ -69,12 +71,17 @@ def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
     for possibility in possibilities:
         print('  ({}) {}'.format(possibility.mnemonic, possibility.name))
 
-    cmd = input('> ').strip().lower()
-    char, *param = cmd.split(maxsplit=1)
+    command = input('> ').strip().lower()
+    parts = command.split(maxsplit=1)
+    if parts:
+        char, *params = parts
+    else:
+        char, params = '', []
+
     answers = [p for p in possibilities if p.mnemonic == char]
 
     if len(answers) == 1:
-        return answers[0].item, param
+        return answers[0].item, params
     elif len(answers) < 1:
         return None, None
     else:  # > 1
