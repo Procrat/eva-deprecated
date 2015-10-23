@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import math
 
 import date_utils
 from pony.orm import Database, Optional, PrimaryKey, Required, Set
@@ -43,8 +44,8 @@ class MetadataMixin(db.Base):
         #     10 + log2(hours needed / hours left before deadline)
 
         time_left = self.deadline - datetime.now()
-        hours_left = (time_left.days * timedelta(hours=4) +
-                      time_left.seconds / 3600)
+        hours_left = timedelta(hours=5 * time_left.days,
+                               seconds=time_left.seconds)
         raw_urgency = 10 + math.log2(self.duration / hours_left)
         return max(10, min(1, raw_urgency))
 
