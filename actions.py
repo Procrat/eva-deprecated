@@ -1,10 +1,12 @@
-from exceptions import QuitException
+import re
 
 from pony import orm
 
 import db
-import ui
+from exceptions import QuitException
 import notifier
+import ui
+import utils
 
 
 def Action(mnemonic: str, name: str):
@@ -28,11 +30,11 @@ def new_idea():
 def new_project():
     name = ui.ask('What project are you planning on taking on?')
     project = db.Project(name=name)
-
+    ui.show("If you're finished just say 'ready' :)")
     # Ask for tasks in this project
     while True:
         task = ui.ask('What does this project consist of?')
-        if not task:
+        if re.match("^|[rR]eady", task) is not None:
             break
         db.Task(content=task, project=project)
 
@@ -66,8 +68,8 @@ def new_task():
     task = db.Task(content=content)
 
     project_choices = list(_generate_project_choices())
-    task.project = ui.let_choose('Is it part of a project?', project_choices,
-                                 none_option='No')
+    task.project, _ = ui.let_choose('Is it part of a project?',
+                                    project_choices, none_option='No')
 
     if ui.ask_polar_question('Can it be divided in smaller chunks?'):
         while True:
@@ -88,39 +90,86 @@ def open_scratchpad():
 
 @Action('l', 'List everything')
 @orm.db_session
+def list_things_or_everything(param='all'):
+
+    def list_project_or_everything(project_name):
+        def f():
+            project = orm.get(project for project in db.Project
+                              if project.name == project_name)
+
+            if project is not None:
+                list_project(project)
+            else:
+                list_all()
+        return f
+
+    lister_dict = utils.regexdict(list_project_or_everything)
+    lister_dict.update({
+        'i(d(eas?)?)?': list_ideas,
+        'p(rojects?)?': list_projects,
+        'r(emind(ers?)?)?': list_reminders,
+        's(cratch(pad)?)?': show_scratchpad,
+        't(asks?)?': list_tasks,
+    })
+
+    return lister_dict[param]()
+
+
 def list_all():
-    def _list_simple_objects(objects, title):
-        if not objects:
-            return
+    list_projects()
+    list_tasks()
+    list_ideas()
+    list_reminders()
+    show_scratchpad()
 
-        print(title.upper())
-        print('-' * len(title))
-        for object in objects:
-            print(object)
-        print()
 
-    for project in db.Project.select():
-        print(project.name.upper())
-        print('-' * len(project.name))
-        for task in project.tasks:
-            print(task)
-        print()
-
-    # List tasks that aren't part of a project
-    tasks = orm.select(task for task in db.Task if task.project is None)
-    _list_simple_objects(tasks, 'tasks')
-
-    ideas = db.Idea.select()
-    _list_simple_objects(ideas, 'ideas')
-
-    reminders = db.Reminder.select().order_by(db.Reminder.when)
-    _list_simple_objects(reminders, 'reminders')
-
+def show_scratchpad():
     scratchpad = db.get_scratchpad()
     if scratchpad.content:
         print('SCRATCHPAD')
         print('----------')
         print(scratchpad.content)
+
+
+def list_reminders():
+    reminders = db.Reminder.select().order_by(db.Reminder.when)
+    _list_simple_objects(reminders, 'reminders')
+
+
+def list_ideas():
+    ideas = db.Idea.select()
+    _list_simple_objects(ideas, 'ideas')
+
+
+def list_tasks():
+    tasks = orm.select(task for task in db.Task if task.project is None)
+    _list_simple_objects(tasks, 'tasks')
+
+
+def list_project(project):
+    print(project.name.upper())
+    print('-' * len(project.name))
+    for task in project.tasks:
+        print(task)
+    print()
+
+
+def list_projects():
+    for project in db.Project.select():
+        list_project(project)
+
+
+def _list_simple_objects(objects, title):
+    """Print title separated from newlined objects."""
+
+    if not objects:
+        return
+
+    print(title.upper())
+    print('-' * len(title))
+    for object in objects:
+        print(object)
+    print()
 
 
 def _generate_project_choices():
@@ -135,6 +184,6 @@ MAIN_ACTIONS = [
     new_idea,
     new_reminder,
     open_scratchpad,
-    list_all,
+    list_things_or_everything,
     quit,
 ]
