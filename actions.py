@@ -28,7 +28,18 @@ def new_idea():
 @Action('p', 'New project')
 @orm.db_session
 def new_project():
-    name = ui.ask('What project are you planning on taking on?')
+    while True:
+        name = ui.ask('What project are you planning on taking on?')
+        if not name:
+            return
+
+        if orm.exists(project for project in db.Project
+                      if project.name == name):
+            ui.show('A project with this name already exists. '
+                    'Please choose another name or leave empty to exit.')
+        else:
+            break
+
     project = db.Project(name=name)
     ui.show("If you're finished just say 'ready' :)")
     # Ask for tasks in this project
