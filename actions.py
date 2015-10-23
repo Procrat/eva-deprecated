@@ -79,11 +79,10 @@ def new_task():
 
 
 @Action('s', 'Open scratchpad')
-@orm.db_session
 def open_scratchpad():
-    scratchpad = db.get_scratchpad()
-    new_content = ui.ask_from_editor(scratchpad.content)
-    scratchpad.content = new_content
+    old_content = db.get_scratchpad_content()
+    new_content = ui.ask_from_editor(old_content)
+    db.set_scratchpad_content(new_content)
 
 
 @Action('l', 'List everything')
@@ -116,11 +115,11 @@ def list_all():
     reminders = db.Reminder.select().order_by(db.Reminder.when)
     _list_simple_objects(reminders, 'reminders')
 
-    scratchpad = db.get_scratchpad()
-    if scratchpad.content:
+    scratchpad_content = db.get_scratchpad_content()
+    if scratchpad_content:
         print('SCRATCHPAD')
         print('----------')
-        print(scratchpad.content)
+        print(scratchpad_content)
 
 
 def _generate_project_choices():

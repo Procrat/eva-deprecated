@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from pony import orm
 from pony.orm import Database, Optional, PrimaryKey, Required, Set
 
 import date_utils
@@ -50,6 +51,17 @@ class Scratchpad(db.Entity):
     content = Optional(str)
 
 
-def get_scratchpad() -> Scratchpad:
-    query_result = Scratchpad.select().for_update()[:1]
-    return query_result[0] if query_result else Scratchpad(content='')
+@orm.db_session
+def get_scratchpad_content() -> str:
+    query_result = Scratchpad.select()[:1]
+    return query_result[0].content if query_result else ''
+
+
+@orm.db_session
+def set_scratchpad_content(new_content):
+    query_result = Scratchpad.select()[:1]
+
+    if query_result:
+        query_result[0].content = new_content
+    else:
+        Scratchpad(content=new_content)
