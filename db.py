@@ -25,12 +25,19 @@ class Task(db.TodoItem):
     project = Optional('Project', reverse='tasks')
     subtasks = Set('Task', reverse='parent_task')
     parent_task = Optional('Task', reverse='subtasks')
+    finished = Required(bool, default=False)
 
     def __str__(self):
         s = '- {}'.format(self.content)
         s += '\n  '.join(str(task.content.split('\n'))
                          for task in self.subtasks)
         return s
+
+    def _finish(self):
+        self.finished = True
+
+    def finish(self):
+        _finish(self) if self.project else self.delete()
 
 
 class Idea(db.TodoItem):
