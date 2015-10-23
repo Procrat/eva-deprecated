@@ -3,7 +3,11 @@ import re
 
 
 class regexdict(defaultdict):
-    """Maps regexes to some values."""
+    """
+    Maps regexes to some values.
+    When presented a string, all regexes tried and the first one that matches
+    the string, is returned.
+    """
 
     def __getitem__(self, key):
         for regex in self.keys():
