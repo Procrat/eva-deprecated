@@ -51,17 +51,18 @@ class Scratchpad(db.Entity):
     content = Optional(str)
 
 
+
+@orm.db_session
+def get_scratchpad() -> Scratchpad:
+    query_result = Scratchpad.select()[:1]
+    return query_result[0] if query_result else Scratchpad(content='')
+
+
 @orm.db_session
 def get_scratchpad_content() -> str:
-    query_result = Scratchpad.select()[:1]
-    return query_result[0].content if query_result else ''
+    return get_scratchpad().content
 
 
 @orm.db_session
 def set_scratchpad_content(new_content):
-    query_result = Scratchpad.select()[:1]
-
-    if query_result:
-        query_result[0].content = new_content
-    else:
-        Scratchpad(content=new_content)
+    get_scratchpad().content = new_content
