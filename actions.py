@@ -33,8 +33,10 @@ def new_project():
         if not name:
             return
 
-        if orm.exists(project for project in db.Project if project.name == name):
-            ui.show('A project with this name already exists. Please choose another name or leave empty to exit.')
+        if orm.exists(project for project in db.Project
+                      if project.name == name):
+            ui.show('A project with this name already exists. '
+                    'Please choose another name or leave empty to exit.')
         else:
             break
 
