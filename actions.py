@@ -103,8 +103,8 @@ def new_task():
 
     project_choices = list(_generate_project_choices())
     if project_choices:
-        task.project, _ = ui.let_choose('Is it part of a project?',
-                                        project_choices, none_option='No')
+        task.project = ui.let_choose('Is it part of a project?',
+                                     project_choices, none_option='No')
 
     task.deadline = _ask_deadline()
 

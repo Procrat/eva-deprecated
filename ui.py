@@ -96,9 +96,28 @@ def ask_timedelta(question: str) -> timedelta:
 
 def let_choose(question: str,
                possibilities: [Choice],
-               none_option=None) -> str:
-    """Prints possibilities and lets user select one through a mnemonic."""
+               none_option=None,
+               with_params=False):
+    """
+    Prints possibilities and lets user select one through a mnemonic.
 
+    Args:
+        question: A question shown to the user
+        possiblities: A sequence of possible Choice items the user can choose
+            from.
+        none_option: A string representing what happens when the user doesn't
+            input anything (and None is returned by this function)
+        with_params: A boolean determining whether to also return user supplied
+            parameters
+
+    Returns:
+        The possibility (Choice.item), as selected by the user
+        or possibly a tuple (choice, parameters entered by the user)
+
+    Raises:
+        MultipleChoicesWithSameMnemonicException: Two possibilities with the
+            same mnemonic are given.
+    """
     print(question)
 
     if none_option is not None:
@@ -116,13 +135,11 @@ def let_choose(question: str,
         char, params = '', []
 
     answers = [p for p in possibilities if p.mnemonic == char]
-
-    if len(answers) == 1:
-        return answers[0].item, params
-    elif len(answers) < 1:
-        return None, None
-    else:  # > 1
+    if len(answers) > 1:
         raise exceptions.MultipleChoicesWithSameMnemonicException()
+
+    choice = answers[0].item if answers else None
+    return choice, params if with_params else choice
 
 
 def ask_from_editor(initial_content: str) -> str:
