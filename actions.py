@@ -7,6 +7,7 @@ from exceptions import QuitException
 import notifier
 import ui
 import utils
+import oi
 
 
 def Action(mnemonic: str, name: str):
@@ -108,78 +109,21 @@ def list_things_or_everything(param='all'):
                               if project.name == project_name)
 
             if project is not None:
-                list_project(project)
+                oi.list_project(project)
             else:
-                list_all()
+                oi.list_all()
         return f
 
     lister_dict = utils.regexdict(list_project_or_everything)
     lister_dict.update({
-        'i(d(eas?)?)?': list_ideas,
-        'p(rojects?)?': list_projects,
-        'r(emind(ers?)?)?': list_reminders,
-        's(cratch(pad)?)?': show_scratchpad,
-        't(asks?)?': list_tasks,
+        'i(d(eas?)?)?': oi.list_ideas,
+        'p(rojects?)?': oi.list_projects,
+        'r(emind(ers?)?)?': oi.list_reminders,
+        's(cratch(pad)?)?': oi.show_scratchpad,
+        't(asks?)?': oi.list_tasks,
     })
 
     return lister_dict[param]()
-
-
-def list_all():
-    list_projects()
-    list_tasks()
-    list_ideas()
-    list_reminders()
-    show_scratchpad()
-
-
-def show_scratchpad():
-    scratchpad_content = db.get_scratchpad_content()
-    if scratchpad_content:
-        print('SCRATCHPAD')
-        print('----------')
-        print(scratchpad_content)
-
-
-def list_reminders():
-    reminders = db.Reminder.select().order_by(db.Reminder.when)
-    _list_simple_objects(reminders, 'reminders')
-
-
-def list_ideas():
-    ideas = db.Idea.select()
-    _list_simple_objects(ideas, 'ideas')
-
-
-def list_tasks():
-    tasks = orm.select(task for task in db.Task if task.project is None)
-    _list_simple_objects(tasks, 'tasks')
-
-
-def list_project(project):
-    print(project.name.upper())
-    print('-' * len(project.name))
-    for task in project.tasks:
-        print(task)
-    print()
-
-
-def list_projects():
-    for project in db.Project.select():
-        list_project(project)
-
-
-def _list_simple_objects(objects, title):
-    """Print title separated from newlined objects."""
-
-    if not objects:
-        return
-
-    print(title.upper())
-    print('-' * len(title))
-    for object in objects:
-        print(object)
-    print()
 
 
 def _generate_project_choices():
