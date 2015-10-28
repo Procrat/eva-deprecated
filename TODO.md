@@ -16,7 +16,7 @@
 - Link met life goals? goal/project/task dependencies?
     - 10y-plan -> 5y-plan -> 2y-plan -> 1y-plan -> 1m-plan -> ...
     - Backwards planning
-- Visualize outcome?
+- Visualize outcome
 - Public commitment / announcement? (Don't know if this can be tied in with the
   application yet)
 - See if http://pyjs.org/Overview.html is any good
