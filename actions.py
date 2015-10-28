@@ -18,6 +18,36 @@ def quit():
     raise QuitException()
 
 
+@Action('w', "I don't know. What should I do, Eva?")
+@orm.db_session
+def what_now():
+    task = _most_urgent() or _most_important()
+
+    if not task:
+        print("You're all done! Why don't you take a break? ^_^")
+        print("If you really don't have anything to do, maybe you can take a"
+              " look at your idea list?")
+        return
+
+    print('I suggest that you {}'.format(task.content))
+    if ui.ask_polar_question('Do you wanna do this?'):
+        ui.ask("Tell me when you're finished or if you're stopping.")
+
+        if ui.ask_polar_question('Is it done?'):
+            print('Good job! ^_^')
+            task.delete()
+    else:
+        @Action('w', "I'm waiting for something.")
+        def waiting_for():
+            task.waiting_for = ui.ask('What are you waiting for?')
+            print('All right, noted. If you need to poke someone for this or'
+                  ' if you can easily speed this up, do it now.')
+
+        reason = ui.let_choose('Why not?', [waiting_for], none_option='Meh')
+        if reason is not None:
+            reason()
+
+
 @Action('i', 'New long-term idea')
 @orm.db_session
 def new_idea():
@@ -41,6 +71,11 @@ def new_project():
             break
 
     project = db.Project(name=name)
+
+    project.deadline = _ask_deadline()
+
+    project.importance = _ask_importance()
+
     ui.show("If you're finished just say 'ready' :)")
     # Ask for tasks in this project
     while True:
@@ -72,15 +107,24 @@ def new_task():
     content = ui.ask('What do you want to have done?')
 
     if ui.ask_polar_question('Does it take less than two minutes?'):
-        print("Do it now! I'll wait.")
-        input('> ')
+        ui.ask("Do it now! I'll wait.")
         return
 
     task = db.Task(content=content)
 
     project_choices = list(_generate_project_choices())
-    task.project, _ = ui.let_choose('Is it part of a project?',
-                                    project_choices, none_option='No')
+    if project_choices:
+        task.project = ui.let_choose('Is it part of a project?',
+                                     project_choices, none_option='No')
+
+    task.deadline = _ask_deadline()
+
+    task.importance = _ask_importance()
+
+    task.duration = _ask_duration()
+
+    if task.is_urgent() and not task.is_important():
+        task.waiting_for = _ask_delegation()
 
     if ui.ask_polar_question('Can it be divided in smaller chunks?'):
         while True:
@@ -88,6 +132,7 @@ def new_task():
             if not subtask_content:
                 break
             subtask = db.Task(content=subtask_content, project=task.project)
+            subtask.duration = _ask_duration()
             task.subtasks.add(subtask)
 
 
@@ -184,11 +229,50 @@ def _list_simple_objects(objects, title):
 
 def _generate_project_choices():
     return ui.generate_choices(db.Project.select(),
-                               lambda project: project.name,
-                               lambda project: project.name.lower())
+                               lambda project: project.name)
+
+
+def _ask_deadline():
+    return ui.pick_date('When would you like to see this finished?',
+                        'All right, setting deadline at {}.')
+
+
+def _ask_importance():
+    return ui.ask_on_scale('On a scale from 1 to 10, how important is this?')
+
+
+def _ask_duration():
+    return ui.ask_timedelta('How long do you think it will take?')
+
+
+def _ask_delegation():
+    print('This task is urgent but not that important. You should delegate it'
+          ' if possible.')
+    return ui.ask('Who will you delegate this to?'
+                  ' (Just hit enter for no one.)')
+
+
+def _most_urgent():
+    try:
+        deadlined_tasks = (t for t in db.Task.select()
+                           if t.deadline is not None and t.waiting_for is None)
+        return orm.max(deadlined_tasks, key=lambda task: task.deadline)
+    except ValueError:
+        return None
+
+
+def _most_important():
+    try:
+        important_tasks = (t for t in db.Task.select()
+                           if t.importance is not None and
+                           t.waiting_for is None)
+        return orm.max(important_tasks, key=lambda task: task.importance)
+    except ValueError:
+        return None
 
 
 MAIN_ACTIONS = [
+    what_now,
     new_task,
     new_project,
     new_idea,

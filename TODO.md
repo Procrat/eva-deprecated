@@ -1,22 +1,10 @@
 # TODO
 
 ## Short term ideas
-- Notifications
-- Reminders
 - Capture everything: recurring tasks
-- Scheduling
-- Reflect: overview, progress
-- What do you wanna do (or have done) today?
+- Scheduling (with Google Calendar?)
+- Reflect: calendar, progress
 - How much work can you do in a day?
-- Project or single task?
-    - Project: Divide in smaller steps
-    - Single task: add to todo-list
-    - Less than two minutes: now
-    - Delegatable? -> Waiting for-task
-    - How long will it take? + How important (pos impact) is it?
-        + How urgent is it? Deadline?
-        -> Schedule (with google agenda?)
-- Choose task to do NOW (eat the frog)
 - Pomodoro (single task)
     - Reschedule stuff when other things get in the way
     - Ask why you stopped doing something
@@ -28,7 +16,7 @@
 - Link met life goals? goal/project/task dependencies?
     - 10y-plan -> 5y-plan -> 2y-plan -> 1y-plan -> 1m-plan -> ...
     - Backwards planning
-- Visualize outcome?
+- Visualize outcome
 - Public commitment / announcement? (Don't know if this can be tied in with the
   application yet)
 - See if http://pyjs.org/Overview.html is any good
@@ -59,3 +47,15 @@
 
 # Done
 - Capture everything: todo, projects, ideas, recurring tasks, scratchpad
+- Notifications
+- Reminders
+- Reflect: overview
+- What do you wanna do (or have done) today?
+- Choose task to do NOW (eat the frog)
+- Flow on adding a task
+    - Project or single task?
+    - Project: Divide in smaller steps
+    - Less than two minutes: now
+    - Delegatable? -> Waiting for-task
+    - How long will it take? + How important (pos impact) is it?
+        + How urgent is it? Deadline?
