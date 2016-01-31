@@ -23,6 +23,12 @@ def ask(question: str) -> str:
     return answer
 
 
+def show(announcement: str) -> None:
+    """Prints announcement."""
+
+    print(announcement)
+
+
 def ask_polar_question(question: str) -> bool:
     """Prints question (preferably a yes-no question) and returns a boolean
     according to user input (yes = True, no = False).
@@ -102,13 +108,19 @@ def let_choose(question: str,
     for possibility in possibilities:
         print('  ({}) {}'.format(possibility.mnemonic, possibility.name))
 
-    char = input('> ').strip().lower()
+    command = input('> ').strip().lower()
+    parts = command.split(maxsplit=1)
+    if parts:
+        char, *params = parts
+    else:
+        char, params = '', []
+
     answers = [p for p in possibilities if p.mnemonic == char]
 
     if len(answers) == 1:
-        return answers[0].item
+        return answers[0].item, params
     elif len(answers) < 1:
-        return None
+        return None, None
     else:  # > 1
         raise exceptions.MultipleChoicesWithSameMnemonicException()
 

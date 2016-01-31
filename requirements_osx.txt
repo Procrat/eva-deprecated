@@ -1,0 +1,6 @@
+parsedatetime==1.5
+pony==0.6.1
+pyobjc-core==3.0.4
+pyobjc-framework-Cocoa==3.0.4
+six==1.10.0
+wheel==0.26.0
