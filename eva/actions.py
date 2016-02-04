@@ -2,11 +2,11 @@ import re
 
 from pony import orm
 
-import db
-from exceptions import QuitException
-import notifier
-import ui
-import utils
+from eva import db
+from eva import notifier
+from eva import ui
+from eva import utils
+from eva.exceptions import QuitException
 
 
 def Action(mnemonic: str, name: str):

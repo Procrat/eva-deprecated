@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import ui
-import actions
-import exceptions
-import settings
+from eva import actions
+from eva import exceptions
+from eva import settings
+from eva import ui
 
 
 def setup():

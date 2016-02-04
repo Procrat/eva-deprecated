@@ -1,7 +1,8 @@
 import re
 
-import date_utils
 import parsley
+
+from eva import date_utils
 
 GRAMMAR = """
 todo_list = ws section*

@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from pony.orm import Database, Optional, PrimaryKey, Required, Set
 
-import date_utils
+from eva import date_utils
 
 db = Database()
 
