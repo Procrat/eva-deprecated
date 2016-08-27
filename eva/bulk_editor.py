@@ -1,79 +1,76 @@
 import re
 
-import parsley
+from eva.bulk_editor_grammar import grammar
 
-from eva import date_utils
-
-GRAMMAR = """
-todo_list = ws section*
-section = (tasks | ideas | reminders | scratchpad | project):section ws -> section
-
-project = normalstr:name underline indent? task*:tasks dedent? -> (name, tasks)
-tasks = 'TASKS' underline indent? task*:tasks dedent? -> ('TAKEN', tasks)
-ideas = 'IDEAS' underline indent? idea*:ideas dedent? -> ('IDEEN', ideas)
-reminders = 'REMINDERS' underline indent? reminder*:reminders dedent? -> ('REMINDERS', reminders)
-scratchpad = 'SCRATCHPAD' underline normalblock:scratchpad -> ('SCRATCHPAD', scratchpad)
-
-task = bullet bulletlessline+:task metadata?:metadata subtasks?:subtasks -> (task, metadata, subtasks)
-bulletlessline = ~bullet line
-idea = bullet line
-reminder = bullet line
-
-subtasks = newline* indent task+:tasks dedent -> tasks
-
-metadata = '[' metadatum (',' metadatum)* ']' newline
-metadatum = duration | importance | waiting_for | deadline
-duration = ('D' | 'd') ':' hspace normalstr
-importance = ('I' | 'i') ':' hspace normalstr
-waiting_for = ('W' | 'w') 'ait for' hspace normalstr
-deadline = ?(parse_datetime)
-
-bullet = '-' hspace
-spacechar = ' ' | '\t'
-hspace = spacechar*
-newline = '\n' | '\r' '\n'?
-blankline = hspace newline
-ws = (spacechar | newline)*
-line = ~newline normalstr:content newline -> content
-underline = newline '='+ newline
-
-indent = '@INDENT@'
-dedent = '@DEDENT@'
-
-normalblock = ~section (normalstr newline)*:content -> content
-normalstr = ~indent ~dedent <normalchar+>
-normalchar = ~(specialchar | newline) anything
-specialchar = '[' | ']'
-"""
+WHITESPACE_REGEX = re.compile(r'\s*')
+WHITESPACE_WITH_DASH_REGEX = re.compile(r'\s*(-\s+)?')
 
 
 def parse(text):
+    text = combine_continuations(text)
+    print(text)
     text = tokenize_indentation(text)
-
-    grammar = parsley.makeGrammar(GRAMMAR, {
-        'parse_datetime': date_utils.parse_datetime,
-    })
+    print(text)
 
     return grammar(text).todo_list()
 
 
-def tokenize_indentation(text):
+def combine_continuations(text):
     new_text = ''
     previous_indentation = 0
-    whitespace_regex = re.compile(r'\s*')
+    previous_was_list_item = False
 
     for line in text.splitlines():
-        match = whitespace_regex.match(line)
+        indent_match = WHITESPACE_REGEX.match(line)
+        indentation = indent_match.end()
+        content = line[indentation:]
+        current_is_list_item = content.startswith('- ')
+
+        is_list_item_continuation = (previous_was_list_item and
+                                     not current_is_list_item and
+                                     indentation == previous_indentation)
+        if is_list_item_continuation:
+            new_text = new_text[:-1] + ' ' + content + '\n'
+        else:
+            new_text += line + '\n'
+
+        previous_indentation = WHITESPACE_WITH_DASH_REGEX.match(line).end()
+        previous_was_list_item = (content.startswith('- ') or
+                                  is_list_item_continuation)
+
+    return new_text
+
+
+def tokenize_indentation(text):
+    new_text = ''
+    previous_indentations = []
+
+    for line_no, line in enumerate(text.splitlines()):
+        match = WHITESPACE_REGEX.match(line)
         indentation = match.end()
+        previous_indentation = sum(previous_indentations)
+        indentation_diff = indentation - previous_indentation
         if indentation > previous_indentation:
             new_text += '@INDENT@'
+            previous_indentations.append(indentation_diff)
         elif indentation < previous_indentation:
-            new_text += '@DEDENT@'
+            for i in range(len(previous_indentations) - 1, -1, -1):
+                last_indent = sum(previous_indentations[i:])
+                if last_indent == -indentation_diff:
+                    new_text += (len(previous_indentations) - i) * '@DEDENT@'
+                    previous_indentations = previous_indentations[:i]
+                    break
+            else:
+                context = '\n'.join(text.splitlines()[line_no - 2:line_no + 3])
+                raise Exception(
+                    'Wrong indentation level at:\n{}\n'
+                    'Previous indents: {}\nIndent now: {}\nDiff: {}'
+                    .format(context, previous_indentations, indentation,
+                            indentation_diff))
         new_text += line[indentation:] + '\n'
-        previous_indentation = indentation
 
-    if indentation > 0:
-        new_text += '@DEDENT@'
+    if len(previous_indentations) > 0:
+        new_text += len(previous_indentations) * '@DEDENT@'
 
     return new_text
 
