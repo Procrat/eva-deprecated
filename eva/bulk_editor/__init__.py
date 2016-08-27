@@ -1,6 +1,6 @@
 import re
 
-from eva.bulk_editor_grammar import grammar
+from eva.bulk_editor.grammar import grammar
 
 WHITESPACE_REGEX = re.compile(r'\s*')
 WHITESPACE_WITH_DASH_REGEX = re.compile(r'\s*(-\s+)?')
