@@ -10,7 +10,7 @@ GRAMMAR = """
 todo_list = ws section*
 section = (tasks | ideas | reminders | scratchpad | project):section ws -> section
 
-project = normalstr:name underline indent?:indented task*:tasks dedent?:deindented ?(indented == deindented) -> (name, tasks)
+project = normalstr:name underline indent?:indented task*:tasks dedent?:dedented ?(same_indent(indented, dedented)) -> (name, tasks)
 tasks = 'TASKS' underline indent? task*:tasks dedent? -> ('TASKS', tasks)
 ideas = 'IDEAS' underline indent? idea*:ideas dedent? -> ('IDEAS', ideas)
 reminders = 'REMINDERS' underline indent? reminder*:reminders dedent? -> ('REMINDERS', reminders)
@@ -53,4 +53,5 @@ Task = namedtuple('Task', ['content', 'metadata', 'subtasks'])
 grammar = parsley.makeGrammar(GRAMMAR, {
     'parse_datetime': date_utils.parse_datetime,
     'Task': Task,
+    'same_indent': lambda indent, dedent: bool(indent) == bool(dedent)
 })
