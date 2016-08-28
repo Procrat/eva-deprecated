@@ -4,6 +4,8 @@ from eva.bulk_editor.grammar import grammar
 
 WHITESPACE_REGEX = re.compile(r'\s*')
 WHITESPACE_WITH_DASH_REGEX = re.compile(r'\s*(-\s+)?')
+INDENT = '@INDENT@'
+DEDENT = '@DEDENT@'
 
 
 def parse(text):
@@ -51,13 +53,13 @@ def tokenize_indentation(text):
         previous_indentation = sum(previous_indentations)
         indentation_diff = indentation - previous_indentation
         if indentation > previous_indentation:
-            new_text += '@INDENT@'
+            new_text += INDENT
             previous_indentations.append(indentation_diff)
         elif indentation < previous_indentation:
             for i in range(len(previous_indentations) - 1, -1, -1):
                 last_indent = sum(previous_indentations[i:])
                 if last_indent == -indentation_diff:
-                    new_text += (len(previous_indentations) - i) * '@DEDENT@'
+                    new_text += (len(previous_indentations) - i) * DEDENT
                     previous_indentations = previous_indentations[:i]
                     break
             else:
@@ -70,7 +72,7 @@ def tokenize_indentation(text):
         new_text += line[indentation:] + '\n'
 
     if len(previous_indentations) > 0:
-        new_text += len(previous_indentations) * '@DEDENT@'
+        new_text += len(previous_indentations) * DEDENT
 
     return new_text
 
