@@ -20,7 +20,7 @@ task = bullet normalstr:content metadata?:metadata newline+ subtasks?:subtasks n
 idea = bullet line
 reminder = bullet line
 
-subtasks = newline* indent task+:tasks dedent -> tasks
+subtasks = indent task+:tasks dedent -> tasks
 
 metadata = '[' metadatum:head (',' hspace metadatum)*:tail ']' -> [head] + tail
 metadatum = duration | importance | waiting_for | deadline

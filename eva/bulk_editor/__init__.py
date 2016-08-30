@@ -25,6 +25,8 @@ def combine_continuations(text):
     for line in text.splitlines():
         indent_match = WHITESPACE_REGEX.match(line)
         indentation = indent_match.end()
+        if indentation == len(line):
+            continue
         content = line[indentation:]
         current_is_list_item = content.startswith('- ')
 
