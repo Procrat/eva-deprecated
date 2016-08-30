@@ -16,19 +16,18 @@ ideas = 'IDEAS' underline indent? idea*:ideas dedent? -> ('IDEAS', ideas)
 reminders = 'REMINDERS' underline indent? reminder*:reminders dedent? -> ('REMINDERS', reminders)
 scratchpad = 'SCRATCHPAD' underline normalblock:scratchpad -> ('SCRATCHPAD', scratchpad)
 
-task = bullet bulletlessline:task metadata?:metadata subtasks?:subtasks newline* -> Task(task, metadata, subtasks)
-bulletlessline = ~bullet line
+task = bullet normalstr:content metadata?:metadata newline+ subtasks?:subtasks newline* -> Task(content, metadata, subtasks)
 idea = bullet line
 reminder = bullet line
 
 subtasks = newline* indent task+:tasks dedent -> tasks
 
-metadata = '[' metadatum (',' metadatum)* ']' newline
+metadata = '[' metadatum:head (',' hspace metadatum)*:tail ']' -> [head] + tail
 metadatum = duration | importance | waiting_for | deadline
-duration = ('D' | 'd') ':' hspace normalstr
-importance = ('I' | 'i') ':' hspace normalstr
-waiting_for = ('W' | 'w') 'ait for' hspace normalstr
-deadline = ?(parse_datetime)
+duration = ('D' | 'd') ':' hspace metadatumstr:content -> ('duration', content)
+importance = ('I' | 'i') ':' hspace metadatumstr:content -> ('importance', content)
+waiting_for = ('W' | 'w') 'ait for' hspace metadatumstr:content -> ('waiting for', content)
+deadline = metadatumstr:content !(parse_datetime(content)):parsed -> ('deadline', parsed)
 
 bullet = ('-' | '*' | '+') hspace
 spacechar = ' ' | '\t'
@@ -38,6 +37,7 @@ blankline = hspace newline
 ws = (spacechar | newline)*
 line = normalstr:content newline+ -> content
 underline = newline '='+ newline
+metadatumstr = <metadatumchar+>
 
 indent = '@INDENT@'
 dedent = '@DEDENT@'
@@ -45,6 +45,7 @@ dedent = '@DEDENT@'
 normalblock = ~section (normalstr newline)*:content -> content
 normalstr = ~indent ~dedent <normalchar+>
 normalchar = ~(specialchar | newline) anything
+metadatumchar = ~(',' | ':') normalchar
 specialchar = '[' | ']'
 """
 
