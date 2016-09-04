@@ -10,14 +10,22 @@ DEDENT = '@DEDENT@'
 
 def parse(text):
     text = combine_continuations(text)
-    print(text)
     text = tokenize_indentation(text)
-    print(text)
 
     return grammar(text).todo_list()
 
 
 def combine_continuations(text):
+    """
+    Removes list item line continuations by putting them in a single line.
+
+    List items can be spread over multiple lines. This troubles the indentation
+    tokenizer because continuations are at a more indented level:
+        - This is a list item
+          which is continued here with more indentation
+    This method converts an item like above to:
+        - This is a list item which is continued here with more indentation
+    """
     new_text = ''
     previous_indentation = 0
     previous_was_list_item = False
@@ -46,6 +54,14 @@ def combine_continuations(text):
 
 
 def tokenize_indentation(text):
+    """
+    Replaces indentations with INDENT/DEDENT tokens.
+
+    It's no fun to keep track of indentation levels. Parsers therefore
+    generally do a preprocessing tokenization step where a change in
+    indentation is replaced by an INDENT/DEDENT token. A change in indentation
+    is the only thing a grammar is interested in actually.
+    """
     new_text = ''
     previous_indentations = []
 
@@ -77,8 +93,3 @@ def tokenize_indentation(text):
         new_text += len(previous_indentations) * DEDENT
 
     return new_text
-
-
-# TODO
-def pprint():
-    pass
