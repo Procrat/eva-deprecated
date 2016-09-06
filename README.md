@@ -1,4 +1,4 @@
-# Eva - Eva Virtual Assistant
+# Eva - Eva Virtual Assistant ![Build status](https://travis-ci.org/Procrat/eva.png?branch=master)](https://travis-ci.org/Procrat/eva)
 
 Your own free personal assistant
 
