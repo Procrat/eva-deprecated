@@ -15,6 +15,13 @@ Pomodoro, the Eisenhower scheme, flow, focussing on one task, small-chunking
 work, eating the frog, etc.
 
 
+## WORK IN PROGRESS
+
+This project hasn't reached an alpha state yet. As a matter of fact, it is being
+completely rewritten in a more sensible approach, trying to reach an MVP sooner
+so we can reap the benefits of dogfooding!
+
+
 ## Installation
 
 Soon `setup.py` will cover dependencies, but for now please install
@@ -38,8 +45,7 @@ At the moment you can just run `main.py` using Python 3.
 
 ## Acknowledgements
 
-Many thanks to
-[Personal Productivity @StackExchange](http://productivity.stackexchange.com),
-[zen habits](http://zenhabits.net)
-and [GTD](http://gettingthingsdone.com)
-for inspiring me!
+Many thanks go out to [Personal Productivity
+@StackExchange](http://productivity.stackexchange.com), [zen
+habits](http://zenhabits.net) and [GTD](http://gettingthingsdone.com) for
+inspiring me!
