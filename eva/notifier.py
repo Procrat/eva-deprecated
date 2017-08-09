@@ -1,6 +1,7 @@
 import platform
 import subprocess as sp
-from exceptions import MissingDependencyException
+
+from eva.exceptions import MissingDependencyException
 
 if platform.system() == "Darwin":
     from datetime import datetime

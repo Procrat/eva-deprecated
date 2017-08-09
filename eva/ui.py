@@ -1,15 +1,16 @@
-import exceptions
 import os
 import subprocess
 import tempfile
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
-import date_utils
+from eva import date_utils
+from eva import exceptions
 
 YES_ANSWERS = ('y', 'yes', 'yep', 'yeah', 'sure', 'ok', 'affirmitive', 'aye',
-               'k', 'kay', 'okay', 'kk')
-NO_ANSWERS = ('n', 'no', 'nope', 'nop', 'nah', 'nein', 'negative')
+               'k', 'kay', 'okay', 'kk', 'uhu')
+NO_ANSWERS = ('n', 'no', 'nope', 'nop', 'nah', 'nein', 'negative',
+              'not really')
 
 Choice = namedtuple('Choice', ('mnemonic', 'name', 'item'))
 
@@ -42,7 +43,26 @@ def ask_polar_question(question: str) -> bool:
             print("Sorry, I couldn't understand that.")
 
 
-def pick_date(question: str, replay: str) -> datetime:
+def ask_on_scale(question: str, range_=range(1, 11)) -> int:
+    """Prints question (preferably asking for a number on a scale) and keeps
+    asking until the user inputs a number or nothing.
+    """
+    while True:
+        answer = ask(question)
+        if answer == '':
+            return None
+
+        try:
+            parsed_answer = int(answer)
+            if parsed_answer in range_:
+                return parsed_answer
+
+            print('Sorry, that number is not on the scale.')
+        except ValueError:
+            print("Sorry, I couldn't understand that.")
+
+
+def pick_date(question: str, replay_template: str) -> datetime:
     """Prints question and returns a datetime or None."""
 
     while True:
@@ -50,16 +70,33 @@ def pick_date(question: str, replay: str) -> datetime:
         if not answer:
             return None
 
-        date = date_utils.parse(answer)
+        date = date_utils.parse_datetime(answer)
         if date:
-            replay = replay.format(date_utils.format(date))
+            replay = replay_template.format(date_utils.format(date))
             if ask_polar_question(replay + '  Affirmative?'):
                 return date
         else:
             print("Sorry, I couldn't understand that.")
 
 
-def let_choose(question: str, possibilities: [Choice], none_option=None) -> str:
+def ask_timedelta(question: str) -> timedelta:
+    """Prints question and returns a timedelta or None."""
+
+    while True:
+        answer = ask(question).lower()
+        if not answer:
+            return None
+
+        delta = date_utils.parse_timedelta(answer)
+        if delta:
+            return delta
+        else:
+            print("Sorry, I couldn't understand that.")
+
+
+def let_choose(question: str,
+               possibilities: [Choice],
+               none_option=None) -> str:
     """Prints possibilities and lets user select one through a mnemonic."""
 
     print(question)
@@ -115,16 +152,27 @@ def ask_from_editor(initial_content: str) -> str:
         os.remove(temp_path)
 
 
-def generate_choices(choices, name_selector, mnemonic_selector):
+def generate_choices(items, name_selector):
+    """
+    Generates choices with fitting mnemonics for a list of items.
+
+    Args:
+        items (List[X]): items to choose from
+        name_selector (Callable[[X], str]):
+            function that derives a name from an item
+    Yields:
+        Choice-objects for each item
+    """
     mnemonics = {}
     no_mnemonic_possible_counter = 0
 
-    for choice in choices:
-        for letter in mnemonic_selector(choice):
+    for item in items:
+        name = name_selector(item)
+        for letter in name.lower():
             if letter not in mnemonics:
                 break
         else:
             letter = str(no_mnemonic_possible_counter)
             no_mnemonic_possible_counter += 1
 
-        yield Choice(letter, name_selector(choice), choice)
+        yield Choice(letter, name, item)
