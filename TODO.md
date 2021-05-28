@@ -1,5 +1,20 @@
 # TODO
 
+## Doing now
+- Bulk edit with favorite editor
+  - ContentChanged (idea)
+  - ContentChanged (reminder)
+  - ContentChanged (scratchpad)
+  - IdeaAdded:
+  - ReminderAdded:
+  - ReminderTimeChanged:
+  - ProjectAdded:
+  - ProjectNameChanged:
+  - TaskRemoved:
+  - ProjectRemoved:
+  - IdeaRemoved:
+  - ReminderRemoved:
+
 ## Short term ideas
 - Notifications
 - Reminders
@@ -24,7 +39,6 @@
 
 ## Long term ideas
 - Labels
-- Bulk edit with favorite editor
 - Link met life goals? goal/project/task dependencies?
     - 10y-plan -> 5y-plan -> 2y-plan -> 1y-plan -> 1m-plan -> ...
     - Backwards planning

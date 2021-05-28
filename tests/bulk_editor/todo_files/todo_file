@@ -1,0 +1,368 @@
+﻿FREEZE
+======
+
+ASAP
+====
+ - Mail naar Brain-duino + Matrix
+ - Squashfactuur van augustus betalen (?)
+ - VPW team zoeken
+ - Google Hash code team
+ - FOSDEM?
+ - Cursuscruisen uitleggen
+ - IAESTE? (http://www.iaeste.be/students/application-procedure)
+ - Samenzitten team 12ul
+ - CL
+
+12UL
+====
+- Logboek bekijken [i:5, d:6m, u:in an hour]
+- Internetverbinding -> Schatting verbruik maken -> PR + BAD
+- Later:
+
+  - Parcours zal altijd 320m zijn
+
+  - Weten waar de aanleveringsroutes zijn zodat we daar rekening mee kunnen
+    houden (zodat we geen kapotte kabels krijgen)
+
+  - Info nodig voor website:
+    - Hoe veranderen rondes / vereniging / DJs?
+  - USB2Eth-adapters + Bluetooth dongles voor RPi's aankopen als budget het
+    voorziet
+  - Gyrids aanvragen
+  - Snapchat? -> Twitter
+
+ZEUS
+====
+- Hub
+ - Posters
+ - Mail
+ - Facebook event, etc
+- Low prio:
+ - Vertel random forest analogie
+ - Sysadmin: MySQL monitoring via new relic + new relic op Tap
+ - Opnames rms?
+ - Vergadering voorbereiden
+ - Zoek mailman alternatief
+ - Minerva API voor Hydra
+ - Review Haldis
+ - Fix dokuwiki RSS
+ - Gamification:
+    - issues via slack toevoegen
+ - Haldis:
+    - Order via slack toevoegen
+ - Statuten aanpassen: volmachten + overgangsperiode duidelijk maken + manifest
+ - Met DICT (Alain, JvC, Danny Schellemans) gaan praten over vloer
+ - Zeus authenticatie herdenken: Zeus als CA
+    - ssh auth -> ssh keys -> certs
+    - wifi auth -> RADIUS -> certs
+    - web app auth -> startssl openid -> certs
+ - Hydra: posters en flyers ophangen/ronddelen
+ - Renovaties: Bakje projector programmeren
+ - Gamification: gadgets met Zeus logo kopen
+ - Site updaten
+   - GhentFPG+Durf ondernemen! weg
+   - Link naar hydra
+   - Pic van kelder + mensen
+   - Kalender -> nieuwsfeed
+   - Link naar facebook + twitter
+   - Projectpagina met links naar Hydra, Gandalf, Gamification (in progress), ...
+ - Ansible
+   - Zorgen dat er geen changes zijn als er geen zijn
+ - Common dotfiles
+
+RECURRING
+=========
+- Arch updaten
+
+MID-TERM TODO
+=============
+  - Afspraak tandarts
+  - Squashfacturen regelen met Tom
+  - http://efinance.org.cn/cn/FEshuo/stochastic.pdf eens doornemen
+  - Maandmenu maken
+  - Cyagenmod installeren
+  - TLMs nalezen
+  - Koopstatistiek
+  - Vest laten inleggen (naaiatelier Gent)
+  - Lade fixen
+  - Ruiten kuisen
+
+DE TODO
+=======
+- To fix
+  - Test ssh agent
+  - Test xdg-open
+- Yes, plz
+  - Palm detection: http://hgdev.co/wp-content/uploads/50-synaptics.conf
+  - Stel dmenu voor dunst deftig in (met Xresources?)
+  - Get screenlocker
+  - Hoe worden terminal applicaties geopend? File roller opent xterm, dmenu opent niets
+  - https://github.com/emgram769/lighthouse
+  - Test: udev: Autosuspend on 10% battery usage
+  - Bluetooth autocommands
+  - Tmux
+    - Tmux service?
+    - https://github.com/tmux-plugins/tmux-resurrect
+    - https://github.com/tmux-plugins/tmux-continuum
+    - https://github.com/tmux-plugins/tmux-sessionist
+    - https://github.com/tpope/vim-obsession
+  - Fast browser: Jumanji vs luakit vs qutebrowser
+  - Dzen
+    - network indicator + notificator on click (met naam)
+    - dropbox indicator
+      - Deftige icon
+      - Tooltip: $(dropbox status)
+    - click on arch -> poweroff/logout menu
+  - Zsh prompt
+    - Deftige double-line
+    - https://github.com/michaeldfallen/git-radar
+    - Left
+      - background jobs if any
+    - Right
+      - Git status + branch
+      - Battery status if under treshold
+- Nice to have
+  - Drop-in replacement voor xdg-open https://wiki.archlinux.org/index.php/Xdg-open
+  - Fix screen tearing
+  - Use virtualenvwrapper + virtualenv voor vim (airline)
+  - Run rankmirrors or user reflector
+  - sxiv ipv feh?
+  - Weston ipv Xorg (fixt mss hidpi issues)
+  - Achtergrond switcher schrijven
+  - fwupd installeren
+  - Desktop compositor: Compton/Xcompmgr?
+  - Lees https://danielmiessler.com/study/tmux/
+  - IRC bouncer
+  - https://wiki.archlinux.org/index.php/S.M.A.R.T.
+  - Rofi ipv dmenu? / dmenu obv lru? / yeganesh + desktop files / zelf schrijven
+  - Password manager (encrypted)
+    - Gnome keyring enough?
+    - https://wiki.archlinux.org/index.php/Pass
+      - Integratie met offlineimap
+    - http://www.passwordstore.org/
+    - https://github.com/nmeum/tpm/
+    - http://onethingwell.org/post/127243279991/rofi-pass
+    - https://github.com/RobBollons/passbox
+  - Fancy icoontjes op m'n bar (font awesome + icomoon)
+  - Ranger image preview met feh
+  - mpd (Deezer?) / Mopidy
+  - New color scheme
+    - https://github.com/sjl/badwolf
+    - http://hans.fugal.net/vim/colors/desert.html
+    - http://files.werx.dk/wombat.vim
+    - https://github.com/w0ng/vim-hybrid
+  - HLWM ideas
+    - Set frame layout of new frame according to aspect ratio
+      - Delete frame when last window is gone
+      - Adjust frame width to window size hint (the actual size when pseudotiling)
+    - Make dzen bar floating (away from edge)
+    - Save/restore functionality for tags
+-  Vim
+  - Vim tags (http://vim.wikia.com/wiki/Browsing_programs_with_tags)
+  - Vimrc: python autocompletion automatically (top 6)
+    - Syntastic?
+    - flake8
+    - Airline extensions
+  - Taglist: http://www.vim.org/scripts/script.php?script_id=273
+  - Tagbar: https://github.com/majutsushi/tagbar
+  - Coole snippets: http://www.vimbits.com/
+  - Een vimrc: https://github.com/joedicastro/dotfiles/tree/master/vim
+  - PyDiction: http://rkulla.github.io/pydiction/
+  - vim-after-object: https://github.com/junegunn/vim-after-object
+  - gitv: https://github.com/gregsexton/gitv
+  - Tbone (access to tmux buffers): https://github.com/tpope/vim-tbone
+  - vim-commentary (Better than NERDCommenter): https://github.com/tpope/vim-commentary
+  - async grep: https://github.com/mhinz/vim-grepper
+  - Autoformat code: https://github.com/Chiel92/vim-autoformat
+  - Haskell shit: https://github.com/neovimhaskell/haskell-vim
+  - Ruby shit: https://github.com/vim-ruby/vim-ruby
+  - Expand selection: https://github.com/terryma/vim-expand-region
+  - Decent grepping: https://github.com/mhinz/vim-grepper
+  - Undo tree: https://github.com/simnalamburt/vim-mundo
+- Power management
+  - https://wiki.archlinux.org/index.php/TLP
+  - https://wiki.archlinux.org/index.php/Laptop
+  - https://wiki.archlinux.org/index.php/CPU_frequency_scaling
+  - http://hgdev.co/optimize-battery-life-on-ubuntu/
+  - https://wiki.archlinux.org/index.php/Power_management#Network_interfaces
+  - https://wiki.archlinux.org/index.php/Laptop_Mode_Tools
+  - https://wiki.archlinux.org/index.php/Pm-utils
+  - https://wiki.archlinux.org/index.php/Laptop#Power_management
+  - https://wiki.archlinux.org/index.php/Powertop
+  - https://www.reddit.com/r/Dell/comments/3v8xna/xps_13_bios_update_due_mid_dec_to_fix_pcie_nvme/cxlnceu
+  - Kernel parameters
+    - 4.4-rc1 with pcie_aspm=force i915.enable_rc6=7
+      - 8h
+    - pcie_aspm=force i915.enable_rc6=7 net.ifnames=0
+    - grond getest pcie_aspm=force i915.enable_rc6=7
+    - geen effect
+      - i915.semaphores=1 : freezes the system when I try to open software at startup
+      - i915.enable_fbc : minor lowering of power consumption (0.05-0.1W) but some bugs, like youtube videos are frozen when full-screen
+      - i915.enable_execlists=0 : no effect measured
+      - i915.enable_psr=1 : no effect measured
+      - i915.preliminary_hw_support : no effect measured (I assume this was needed in older kernels, 4.4 doesn't need it)
+      - i915.enable_guc_submission=Y
+-  Interessante dotfiles
+  - https://github.com/Olical/dotfiles
+  - The-Compiler
+  - http://git.the-compiler.org/configs/tree/
+  - http://git.the-compiler.org/vimfiles/tree/
+  - http://git.the-compiler.org/panel2/tree/panel2.sh
+
+TLM
+===
+- Zijbalkjes op mobiele versie wegdoen
+- Optimize rss feed zoda ie (1) sneller geladen wordt, en (2) niet onnodig
+  opgevraagd wordt
+
+IA
+==
+- Optimal risky portfolio (Markowitz portfolio selection)
+- Predictions met GARCH
+- Factor / index models
+- Machine learning models
+   - features: infl rate, tijd, foreign exchange rate, interest rate, foreign
+     interest rates, announcements, SMB, HML (Fama-French), commodities, macro
+     en micro shizzle, growth of US production, unexpected inflation, Baa
+     Yield, long term rate (Chen, Roll, Ross), sinus
+- Treynor-Black algoritme
+- Benchmark adhv random, FF
+- Event studies
+- Momuntum effect
+- https://en.wikipedia.org/wiki/Modern_portfolio_theory
+- Black Scholes model
+
+- http://www.fxdd.com/mt/en.html
+- Quantopian
+- Interactive Brokers
+- Neurale netwerken, Support vector machines, hidden markov models, Kalman
+- Filters, Black Scholes, Finite differences methods
+- QuantInsti.com
+    - Time series analysis
+    - Greeks & Position management
+    - Dispersion Trading
+    - Market microstructure
+    - Pairs & statistical arbitrage
+    - Basic trading strategies
+    - Handling HFT data
+    - Backtesting & optimization
+
+
+NOOIT
+=====
+- Sms-ding
+- Lezen (zie Boeken)
+- Dropbox TODO folder
+- Firefox bookmarks
+- xkcd volledig lezen
+- SMBC volledig lezen
+- 'Als je eens tijd hebt'-map
+
+- IT-related:
+  - Pdf networking lezen
+  - Perl tutorial op Scriptingtalen-wiki
+  - The Art of Exploitation (by Jon "Smibbs" Erickson)
+  - Numba
+  - CoVim
+  - Haunted Souls
+  - Learn you a Haskell
+  - Erlang
+  - E
+  - C++
+  - Perl
+  - IdeaVim plugin
+  - Railsguides lezen
+  - Cloud op Pi
+  - TikZ op Prime site
+  - Rust
+  - PCA met SVD
+  - https://github.com/i-tu/Hasklig
+  - Scalatron
+  - http://elixir-lang.org/
+  - React.js
+  - Eva
+  - https://github.com/prakhar1989/awesome-courses
+  - http://natureofcode.com/book/
+  - http://semver.org/
+  - SELinux
+- PYTHON
+  - http://book.pythontips.com/en/latest/
+  - TyPy
+  - PyCharm
+  - Timsort & Smoothsort
+     -  http://en.wikipedia.org/wiki/Timsort
+     -  https://mail.python.org/pipermail/python-dev/2002-July/026837.html
+     -  http://bugs.python.org/file4451/timsort.txt
+  - https://github.com/davidhalter/jedi-vim
+  - https://www.python.org/dev/peps/pep-0484/
+  - http://chimera.labs.oreilly.com/books/1230000000393
+  - http://python-3-patterns-idioms-test.readthedocs.org/en/latest
+  - http://norvig.com/sudoku.html
+  - http://norvig.com/spell-correct.html
+  - http://segmentfault.com/a/1190000002517893
+  - Stackless Python
+- DATA SCIENCE
+  - https://datarithms.wordpress.com/2015/08/16/top-20-data-science-moocs/?utm_campaign=Data%2BElixir&utm_medium=web&utm_source=Data_Elixir_52
+  - http://blog.kaggle.com/2015/05/28/scikit-learn-video-6-linear-regression-plus-pandas-seaborn/
+  - http://blog.yhathq.com/posts/predict-weather-with-kaggle-twitter-emoticons-pandas.html
+  - https://machinelearningmastery.com/jump-start-scikit-learn/
+- PRODUCTIVITY/MOTIVATION:
+  - GTD (Capture, clarify, organize, reflect, engage)
+  - Kanban
+  - Explicit goal sheet with milestones and priorities
+  - Laudatory diary
+  - Pomodoro (48+12)
+  - Focus booster
+  - Scheduling
+  - Eisenhower scheme
+  - Use adaptability
+  - Rewards
+  - Single task
+  - Learn to say no
+  - Reminders
+  - Motivation = (Expectancy * value)/(impulsiveness * delay)
+  - Motivation
+    - Small chunk the work
+    - Tell others (or not)
+    - Remove distractions
+    - Change locations
+    - Take a walk
+    - Enjoy the breaks (cfr Pomodoro)
+    - Meditate
+    - Self-fulfilling shizzle: seem motivated
+- MUZIEK:
+  - Muziek downloaden (TODO)
+  - Muziek metadata aanvullen
+  - Final Fantasy OST
+  - Everlasting Summer OST
+  - Steins;Gate OST
+  - https://www.youtube.com/playlist?list=PL2_2ohnYog3plhIMht9RB05J_tHWL1g9R
+- GAMES:
+  - Broken Sword 1
+  - Broken Sword 2
+  - Anotherworld (DOS)
+  - TrackMania²
+  - Hackworld
+  - Portal (Linux port)
+  - SplitWolf
+  - The Longest Journey (Funcom, Single Player)
+  - Monty Python & the quest for the Holy Grail
+  - Don't starve
+  - Beneath a Steel Sky (Charles Cecil)
+  - In cold blood (Charles Cecil)
+  - Watchdogs
+  - Mirror's Edge (EW66-PY3N-A8BN-N4GX-YFDB)
+  - Walking Dead
+  - To the moon
+  - Papo & yo
+  - Antichamber
+  - Analogue: A Hate Story (http://scoutshonour.com/analogue/)
+  - Unteralterbach
+  - http://syro2eznzea2xbpi.onion (Aphex Twin)
+  - Machinarium
+  - vndb.org
+  * Poacher (van Ben "Yahtzee" Croshaw)
+  - Homesick
+  - http://crawl.develz.org/wordpress/
+  - The uncle who works for Nintendo
+- TK/MK splitsen
